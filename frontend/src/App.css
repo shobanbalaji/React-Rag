@@ -1,42 +1,79 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 100%;
+  margin: auto;
+  padding: 0rem 1.5rem 0rem 1rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+.message-bar{
+  border: none;
+  min-height: 100px;
+  width: 750px;
+  padding: 20px;
+  border-radius: 25px;
+  background: #424242;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.message-bar .message-input{
+  border: none;
+  background: #424242;
+  color: white;
+  font-size: 15px;
+  width: 100%;
+  min-height: auto;
+  max-height: 200px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+
+.message-bar .message-input:focus{
+  border: none !important;
+  box-shadow: none;
 }
 
-.card {
-  padding: 2em;
+.message-bar .message-input:focus-within{
+  border: none !important;
+  box-shadow: none;
+  background: inherit;
+  color: white;
 }
 
-.read-the-docs {
-  color: #888;
+.message-bar.message-input::placeholder {
+  color: #fff !important; /* Your desired color */
+}
+
+.rag-container{
+  height: 100vh !important;
+}
+
+
+.chat-item:hover{
+  background-color: #aaa;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.message-bar.message-input::-webkit-scrollbar-thumb{
+  height: 2px !important;
+  background: red !important;
+}
+
+.chat-item-active{
+  background-color: #aaaaaaa3;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.chat-item{
+  margin-top: 10px;
+}
+
+
+.chat-item input:focus{
+  box-shadow: none ;
+  border: none;
+}
+
+.chat-item input:target-within{
+  box-shadow: none ;
+  border: none;
 }
