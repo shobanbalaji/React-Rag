@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-
+from app.routes.users import user_routes
 app = FastAPI()
 
 class QueryRequest(BaseModel):
@@ -9,6 +9,10 @@ class QueryRequest(BaseModel):
 @app.get("/")
 async def root():
     return {"message": "API is running!"}
+
+
+app.include_router(user_routes.router, prefix="/api/users", tags=["users"])
+
 
 @app.post("/query")
 async def query_endpoint(request: QueryRequest):

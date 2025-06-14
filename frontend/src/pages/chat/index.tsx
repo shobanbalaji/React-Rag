@@ -6,7 +6,7 @@ import { TbLayoutSidebarFilled } from "react-icons/tb";
 
 const index = () => {
   const [message, setMessage] = useState<string>("");
-  const [sidebar, setSidebar] = useState<boolean>(false);
+  const [sidebar, setSidebar] = useState<boolean>(true);
   const [chatId, setChatId] = useState<string>("auto");
 
   // get chat data

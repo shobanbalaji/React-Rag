@@ -47,7 +47,7 @@
 
 
 .chat-item:hover{
-  background-color: #aaa;
+  background-color: #aaaaaa17;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -58,7 +58,7 @@
 }
 
 .chat-item-active{
-  background-color: #aaaaaaa3;
+  background-color: #aaaaaa17;
   cursor: pointer;
   border-radius: 5px;
 }
