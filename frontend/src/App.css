@@ -1,7 +1,6 @@
 #root {
   max-width: 100%;
   margin: auto;
-  padding: 0rem 1.5rem 0rem 1rem;
 }
 
 
@@ -43,6 +42,8 @@
 
 .rag-container{
   height: 100vh !important;
+  padding: 0rem 1.5rem 0rem 1rem;
+
 }
 
 
