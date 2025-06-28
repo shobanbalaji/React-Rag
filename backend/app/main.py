@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
-from app.routes.users import user_routes
+from app.routes.users.user_routes import router as user_routes
 from app.routes.authentication.auth_routes import router as auth_routes
+from app.routes.chat.chat_routes import router as chat_routes
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -16,23 +17,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 class QueryRequest(BaseModel):
     query: str
+
 
 @app.get("/")
 async def root():
     return {"message": "API is running!"}
 
 
-app.include_router(user_routes.router, prefix="/api/users", tags=["users"])
+app.include_router(user_routes, prefix="/api/users", tags=["users"])
 app.include_router(auth_routes, prefix="/api/authentication", tags=["authentication"])
-
-
-@app.post("/query")
-async def query_endpoint(request: QueryRequest):
-    user_query = request.query
-    # For now, just echo the query back with a dummy answer
-    return {
-        "query": user_query,
-        "answer": f"You asked: '{user_query}'. This is a dummy response."
-    }
+app.include_router(chat_routes, prefix="/api/chat", tags=["chat"])

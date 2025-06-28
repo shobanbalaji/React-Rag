@@ -33,7 +33,7 @@ async def authenticateUser(payload):
       query = {"email":payload["email"],
          "password":payload["password"]}
       
-      result = await get_documents(collection_name=collection, query=query)
+      result = await get_documents(collection_name=collection, query=query, exclude_fields=["password"])
       return result
     # except Exception as e:
     #   print(f'Exception occurred: {e}')

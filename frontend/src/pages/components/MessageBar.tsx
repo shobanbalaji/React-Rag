@@ -1,13 +1,19 @@
 import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { Col, Form, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
-import { LuSettings2 } from "react-icons/lu";
+import { LuSettings2, LuAudioLines } from "react-icons/lu";
 import { FaCircleArrowUp } from "react-icons/fa6";
 import { FaSquare } from "react-icons/fa";
-import { LuAudioLines } from "react-icons/lu";
 import type { MessageBarProps } from "../../types";
+import { sendConversion } from "../../functions/chat";
+import { makeErrorToast } from "../../functions/common/common";
+import { UI_ERROR_MESSAGE, UID } from "../../functions/variables/common";
 
-const MessageBar: React.FC<MessageBarProps> = ({ setMessage, message }) => {
+const MessageBar: React.FC<MessageBarProps> = ({
+  setMessage,
+  message,
+  chatId,
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [sendMessage, setSendMessage] = useState<boolean>(false);
 
@@ -16,11 +22,28 @@ const MessageBar: React.FC<MessageBarProps> = ({ setMessage, message }) => {
     setMessage(value);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     try {
+      if (message.trim().length == 0) {
+        return true;
+      }
       setSendMessage(true);
+      const { code, success, data } = await sendConversion({
+        message: message.trim(),
+        userId: UID,
+        chatId: chatId,
+      });
+      if (code === 500 && !success) {
+        makeErrorToast(UI_ERROR_MESSAGE);
+        setSendMessage(false);
+        return;
+      }
+      setMessage("");
+      setSendMessage(false);
     } catch (error) {
       console.error(error);
+      makeErrorToast(UI_ERROR_MESSAGE);
+      setSendMessage(false);
     }
   };
 
@@ -51,13 +74,21 @@ const MessageBar: React.FC<MessageBarProps> = ({ setMessage, message }) => {
       <Row className="justify-content-between mt-3">
         <Col>
           <div className="d-flex gap-3 ">
-            <FiPlus size={20} color="white" style={{ cursor: "pointer" }} />
-            <LuSettings2
-              size={20}
+            <FiPlus
+              className="hover-icons p-1"
+              size={25}
               color="white"
               style={{ cursor: "pointer" }}
-            />{" "}
-            <span className="text-white">Tools </span>
+            />
+            <div className="hover-icons ps-1 pe-2">
+              <LuSettings2
+                size={25}
+                className="p-1 "
+                color="white"
+                style={{ cursor: "pointer" }}
+              />{" "}
+              <span className="text-white">Tools </span>
+            </div>
           </div>
         </Col>
 
@@ -66,6 +97,7 @@ const MessageBar: React.FC<MessageBarProps> = ({ setMessage, message }) => {
             <LuAudioLines
               size={22}
               color="white"
+              className="p-1 hover-icons"
               style={{ cursor: "pointer" }}
             />
             {!sendMessage ? (
@@ -73,6 +105,9 @@ const MessageBar: React.FC<MessageBarProps> = ({ setMessage, message }) => {
                 size={25}
                 color="white"
                 type="submit"
+                className={`${
+                  message.trim().length > 0 ? "enable-submit" : "disable-submit"
+                }`}
                 onClick={handleClick}
                 style={{ cursor: "pointer" }}
               />

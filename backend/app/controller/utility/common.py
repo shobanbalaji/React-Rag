@@ -1,11 +1,13 @@
 from app.mongo import get_db
 from pymongo.errors import PyMongoError
 from bson import ObjectId
+
 db = get_db()
+
 
 async def add_document(collectionName: str, document: dict, model):
     try:
-        # Collection Reference 
+        # Collection Reference
         collectionRef = db[collectionName]
         # Validate document using the model
         validated_data = model(**document).dict()
@@ -19,20 +21,24 @@ async def add_document(collectionName: str, document: dict, model):
     except Exception as e:
         print("Validation or other Error:", e)
         return {"status": "error", "message": str(e)}
-    
-    
-    
 
-async def get_documents(collection_name: str, query: dict):
+
+async def get_documents(collection_name: str, query: dict, exclude_fields: list = None):
     try:
         if "_id" in query:
             query["_id"] = ObjectId(query["_id"])
 
         collection = db[collection_name]
-        cursor = collection.find(query)  # Synchronous
+
+        # Build the projection dict to exclude specified fields
+        projection = None
+        if exclude_fields:
+            projection = {field: 0 for field in exclude_fields}
+
+        cursor = collection.find(query, projection)  # Add projection here
 
         results = []
-        for doc in cursor:  # regular for loop
+        for doc in cursor:
             doc["_id"] = str(doc["_id"])
             results.append(doc)
 
@@ -41,14 +47,14 @@ async def get_documents(collection_name: str, query: dict):
                 "code": 404,
                 "message": "No documents matched",
                 "data": [],
-                "success": False
+                "success": False,
             }
 
         return {
             "code": 200,
             "message": "Documents found",
             "data": results,
-            "success": True
+            "success": True,
         }
 
     except Exception as e:
@@ -57,5 +63,16 @@ async def get_documents(collection_name: str, query: dict):
             "code": 500,
             "message": "Internal Server Error",
             "data": [],
-            "success": False
+            "success": False,
         }
+
+
+def clean_object_ids(data):
+    if isinstance(data, dict):
+        return {key: clean_object_ids(value) for key, value in data.items()}
+    elif isinstance(data, list):
+        return [clean_object_ids(item) for item in data]
+    elif isinstance(data, ObjectId):
+        return str(data)
+    else:
+        return data

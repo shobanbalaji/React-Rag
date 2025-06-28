@@ -4,7 +4,7 @@
 }
 
 
-.message-bar{
+.message-bar {
   border: none;
   min-height: 100px;
   width: 750px;
@@ -13,7 +13,7 @@
   background: #424242;
 }
 
-.message-bar .message-input{
+.message-bar .message-input {
   border: none;
   background: #424242;
   color: white;
@@ -24,12 +24,12 @@
 }
 
 
-.message-bar .message-input:focus{
+.message-bar .message-input:focus {
   border: none !important;
   box-shadow: none;
 }
 
-.message-bar .message-input:focus-within{
+.message-bar .message-input:focus-within {
   border: none !important;
   box-shadow: none;
   background: inherit;
@@ -37,44 +37,62 @@
 }
 
 .message-bar.message-input::placeholder {
-  color: #fff !important; /* Your desired color */
+  color: #fff !important;
+  /* Your desired color */
 }
 
-.rag-container{
+.rag-container {
   height: 100vh !important;
   padding: 0rem 1.5rem 0rem 1rem;
 
 }
 
 
-.chat-item:hover{
+.chat-item:hover {
   background-color: #aaaaaa17;
   cursor: pointer;
   border-radius: 5px;
 }
 
-.message-bar.message-input::-webkit-scrollbar-thumb{
+.message-bar.message-input::-webkit-scrollbar-thumb {
   height: 2px !important;
   background: red !important;
 }
 
-.chat-item-active{
+.chat-item-active {
   background-color: #aaaaaa17;
   cursor: pointer;
   border-radius: 5px;
 }
 
-.chat-item{
+.chat-item {
   margin-top: 10px;
 }
 
 
-.chat-item input:focus{
-  box-shadow: none ;
+.chat-item input:focus {
+  box-shadow: none;
   border: none;
 }
 
-.chat-item input:target-within{
-  box-shadow: none ;
+.chat-item input:target-within {
+  box-shadow: none;
   border: none;
+}
+
+.chat-list-bar::-webkit-scrollbar {
+  width: 0.3rem !important;
+  background-color: rgb(102, 91, 91);
+  border-radius: 1rem;
+}
+
+.disable-submit {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
+
+.hover-icons:hover {
+  background-color: rgba(212, 209, 215, 0.199);
+  border-radius: 8px;
 }
