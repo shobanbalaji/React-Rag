@@ -8,6 +8,10 @@ import { makeWarningToast } from "../../functions/common/common";
 const Login = () => {
   const [form, setForm] = useState<loginType>({ email: "", password: "" });
   const nav = useNavigate();
+
+
+  // this function handle the submit functionality and make request to api to validate the user and also handle the exceptions
+  // store the basic user value to session storage for quick access 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
@@ -22,6 +26,8 @@ const Login = () => {
       console.error(error);
     }
   };
+
+  // this function handle the input onChange and set the value to the state 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));

@@ -1,7 +1,9 @@
 from app.mongo import get_db
-from app.models.chat.chat_model import chatModel, conversationModel
+from pymongo import DESCENDING
+from app.models.chat.chat_model import chatModel, conversationModel, conversationResponseModel
 from app.controller.utility.common import clean_object_ids
-
+from app.controller.gemini.utilityGemini import geminiResponse
+from bson import ObjectId
 db = get_db()
 
 
@@ -27,14 +29,14 @@ async def createChatRequest(userId, message, chatId):
         if message:
 
             # get response from Gemini API
-            # code will below..
+            request_gemini = await geminiResponse(message)
 
             # structure and validate the payload
             payload = {
                 "UId": userId,
-                "chatId": chatId if chatId else cleaned_chat_response._id,
+                "chatId": chatId if chatId and chatId != "auto" else cleaned_chat_response["_id"],
                 "message": message,
-                "response": "hello there !",
+                "response": request_gemini,
                 "isRag": False,
             }
             validate_conversation_payload = conversationModel(**payload).dict()
@@ -59,7 +61,7 @@ async def createChatRequest(userId, message, chatId):
 
 async def retrieveUserChats(userId):
     try:
-        chats = db["chat"].find({"UId": userId})  # returns a cursor
+        chats = db["chat"].find({"UId": userId}).sort("createdAt", DESCENDING)
 
         chat_list = [{**chat, "_id": str(chat["_id"])} for chat in chats]
 
@@ -78,3 +80,66 @@ async def retrieveUserChats(userId):
             "success": False,
             "data": [],
         }
+
+
+async def retrieveUserConversations(userId, chatId):
+    try:
+      ref = db["conversation"]
+      responses = ref.find({"UId":userId, "chatId":chatId})
+      return {
+          "data":[{**response, "_id": str(response["_id"])} for response in responses]
+      }
+    except Exception as e:
+      print('An exception occurred')
+      
+      
+# rename chat name
+async def renameChat(userId, chatId, chatName):
+    try:
+      chats = db["chat"]
+      response = chats.update_one(
+            {"_id": ObjectId(chatId), "UId": userId}, 
+            {"$set": {"chatName": chatName}}           
+        )
+      return{
+          "code":200,
+          "success":True,
+          "data":{"value":chatName},
+          "message":"Rename Successful"
+      }
+    except Exception as e:
+      print('An exception occurred')
+      return{
+          "code":500,
+          "success":False,
+          "message":"Rename failed"
+      }
+      
+      
+# delete chat based on id and user id
+async def deleteChat(userId, chatId):
+    try:
+      chatRef = db["chat"]
+      deleteChat = chatRef.delete_one({"_id": ObjectId(chatId), "UId": userId})
+      if deleteChat.deleted_count == 1:
+        print("Chat deleted successfully.")
+        return{
+          "code":200,
+          "success":True,
+          "data":{"value":chatId},
+          "message":"Chat deleted successful"
+      }
+      else:
+        print("No chat found or unauthorized.")
+        return{
+          "code":500,
+          "success":False,
+          "message":"Failed to delete chat"
+      }
+    except Exception as e:
+      print('An exception occurred')
+      return{
+          "code":500,
+          "success":False,
+          "message":"Failed to delete chat"
+      }

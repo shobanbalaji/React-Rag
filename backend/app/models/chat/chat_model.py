@@ -18,3 +18,11 @@ class conversationModel(BaseModel):
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     isRag: bool
+
+
+class conversationResponseModel(BaseModel):
+    chatId:str
+    request:str
+    response:str
+    createdAt:datetime
+    updatedAt:datetime

@@ -17,11 +17,13 @@ const MessageBar: React.FC<MessageBarProps> = ({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [sendMessage, setSendMessage] = useState<boolean>(false);
 
+  // this function handles the onchange value of the message bar value and set the value into state
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setMessage(value);
   };
 
+  // this function handle to make a request to api and store the response values to the relevant state and handle exceptions
   const handleClick = async () => {
     try {
       if (message.trim().length == 0) {
@@ -47,16 +49,18 @@ const MessageBar: React.FC<MessageBarProps> = ({
     }
   };
 
+  // this useEffect handle the message bar height and scroll
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto"; // Reset height
-      textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
+      // textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
+      // textarea.style.maxHeight = `180px`; // Set new height
     }
   }, [message]);
 
   return (
-    <div className="message-bar ">
+    <div className="message-bar" style={{maxHeight:"200px"}}>
       <Form onSubmit={handleClick}>
         <Form.Control
           type="text"
@@ -66,12 +70,12 @@ const MessageBar: React.FC<MessageBarProps> = ({
           onChange={handleChange}
           value={message}
           ref={textareaRef}
-          style={{ resize: "none", overflowX: "hidden" }}
+          style={{ resize: "none", overflowX: "hidden", minHeight:"75px", maxHeight:"280px"}}
         />
       </Form>
 
       {/* actions */}
-      <Row className="justify-content-between mt-3">
+      <Row className="justify-content-between">
         <Col>
           <div className="d-flex gap-3 ">
             <FiPlus
@@ -95,7 +99,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
         <Col>
           <div className="d-flex gap-3 justify-content-end align-items-center">
             <LuAudioLines
-              size={22}
+              size={25}
               color="white"
               className="p-1 hover-icons"
               style={{ cursor: "pointer" }}

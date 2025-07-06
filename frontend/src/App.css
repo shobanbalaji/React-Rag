@@ -6,23 +6,31 @@
 
 .message-bar {
   border: none;
-  min-height: 100px;
-  width: 750px;
-  padding: 20px;
+  min-height: 80px;
+  width: 800px;
+  padding:20px;
   border-radius: 25px;
-  background: #424242;
+  background: #303030;
 }
 
 .message-bar .message-input {
   border: none;
-  background: #424242;
+  background: #303030;
   color: white;
   font-size: 15px;
   width: 100%;
-  min-height: auto;
-  max-height: 200px;
+  min-height: auto; 
+  font-family: Arial, Helvetica, sans-serif;
 }
 
+.message-input::-webkit-scrollbar{
+  width:5px !important;
+  height:5px !important;
+}
+.message-input::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* visible thumb */
+  border-radius: 1rem;
+}
 
 .message-bar .message-input:focus {
   border: none !important;
@@ -44,7 +52,6 @@
 .rag-container {
   height: 100vh !important;
   padding: 0rem 1.5rem 0rem 1rem;
-
 }
 
 
@@ -86,6 +93,11 @@
   border-radius: 1rem;
 }
 
+.chat-list-bar::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* visible thumb */
+  border-radius: 1rem;
+}
+
 .disable-submit {
   cursor: not-allowed !important;
   opacity: 0.5;
@@ -95,4 +107,26 @@
 .hover-icons:hover {
   background-color: rgba(212, 209, 215, 0.199);
   border-radius: 8px;
+}
+
+.chat-viewer::-webkit-scrollbar {
+  width: 0.3rem !important;
+  background-color: transparent; /* keep track background clean */
+  border-radius: 1rem;
+}
+
+.chat-viewer::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* visible thumb */
+  border-radius: 1rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaa !important; /* change to any color */
+  font-weight: 500;
+  opacity: 1;  /* make sure it's fully visible */
+}
+
+.dropdown-toggle::after{
+  border: none !important;
 }

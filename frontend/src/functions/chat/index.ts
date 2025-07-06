@@ -40,9 +40,11 @@ const createChat = async ({ userId, message, c_id }: { userId: string, message?:
 };
 
 // Rename Chat
-const renameChat = async ({ userId }: { userId: string }) => {
+const renameChat = async ({ userId, c_id, c_n }: { userId: string, c_id: string, c_n: string }) => {
     try {
-        const response = await axios.put(`${API_ENDPOINT}chat/renameChat`, {}, {
+        const response = await axios.patch(`${API_ENDPOINT}chat/renameChat`, {
+            c_id, c_n
+        }, {
             headers: { userId }
         });
         return response.data;
@@ -59,9 +61,8 @@ const renameChat = async ({ userId }: { userId: string }) => {
 // Delete Chat
 const deleteChat = async ({ userId, c_id }: { userId: string; c_id: string }) => {
     try {
-        const response = await axios.delete(`${API_ENDPOINT}chat/deleteChat`, {
+        const response = await axios.delete(`${API_ENDPOINT}chat/deleteChat/${c_id}`, {
             headers: { userId },
-            params: { c_id }
         });
         return response.data;
     } catch (error) {
@@ -91,10 +92,28 @@ const sendConversion = async ({ userId, message, chatId }: { userId: string; mes
     }
 };
 
+const fetchConversation = async ({ userId, chatId }: { userId: string, chatId: string }) => {
+    try {
+        const response = await axios.get(`${API_ENDPOINT}chat/fetchChats`, {
+            params: { c_id: chatId },
+            headers: { userId: userId }
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return {
+            code: 500,
+            message: `${INTERNAL_SERVER_ERROR} : ${error}`,
+            success: false
+        };
+    }
+}
+
 export {
     getUserChats,
     createChat,
     renameChat,
     deleteChat,
-    sendConversion
+    sendConversion,
+    fetchConversation,
 };

@@ -12,52 +12,74 @@ import ChatList from "../components/ChatList";
 import ChatHeader from "../components/ChatHeader";
 
 // Functions
-import { createChat, getUserChats } from "../../functions/chat";
+import { fetchConversation, getUserChats } from "../../functions/chat";
 import { makeErrorToast } from "../../functions/common/common";
 
 // Constants & Types
 import { UI_ERROR_MESSAGE, UID } from "../../functions/variables/common";
-import type { chatListProps } from "../../types";
+import type { chatListProps, conversationDataProps } from "../../types";
+import { getParamsValue } from "../../functions/utility/utility";
+import ChatViewer from "../components/ChatViewer";
 
 const index = () => {
   const [message, setMessage] = useState<string>("");
-  const [sidebar, setSidebar] = useState<boolean>(false);
-  const [chatId, setChatId] = useState<string>("auto");
+  const [sidebar, setSidebar] = useState<boolean>(true);
+  const [chatId, setChatId] = useState<string>("");
   const [chatList, setChatList] = useState<chatListProps[]>([]);
   const [sidebarPointer, setSidebarPointer] = useState<boolean>(false);
+  const [conversationData, setConversationData] = useState<conversationDataProps[]>([]);
   const nav = useNavigate();
 
-  // get all user chat data
-  const getChatData = async () => {
-    try {
-      const { code, success, data } = await getUserChats({ userId: UID });
-      if (code === 500 && !success) {
-        makeErrorToast("Failed to fetch chat history");
-      }
-      setChatList(data);
-    } catch (error) {
-      console.error(error);
-      makeErrorToast(UI_ERROR_MESSAGE);
-    }
-  };
-
-  const createNewChat = async () => {
-    try {
-      nav("?model=auto");
-      const response = await createChat({ userId: UID });
-    } catch (error) {
-      console.error(error);
-      makeErrorToast(UI_ERROR_MESSAGE);
-    }
-  };
-
+  // get the chat id based on the params values
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const paramValue = params.get("id");
+    if (paramValue) {
+      setChatId(paramValue);
+    }
+  }, []);
+
+  // fetch the user conversation based on chat and user ids / this useEffect render everyTime when the chatId change
+  useEffect(() => {
+    if (!chatId) return; // prevent fetch on initial/default state
+  
+    const fetchConversationData = async () => {
+      try {
+        const response = await fetchConversation({ chatId, userId: UID });
+        setConversationData(response.data);
+      } catch (error) {
+        console.error(error);
+        makeErrorToast(UI_ERROR_MESSAGE);
+      }
+    };
+  
+    fetchConversationData();
+  }, [chatId]);
+
+  // get all user chat data for side bar - this render one time
+  useEffect(() => {
+    const getChatData = async () => {
+      try {
+        const { code, success, data } = await getUserChats({ userId: UID });
+        if (code === 500 && !success) {
+          makeErrorToast("Failed to fetch chat history");
+        }
+        setChatList(data);
+      } catch (error) {
+        console.error(error);
+        makeErrorToast(UI_ERROR_MESSAGE);
+      }
+    };
     getChatData();
   }, []);
 
   return (
-    <div className="rag-container">
-      <Row>
+    <div
+      className="rag-container"
+      style={{ height: "100vh", overflow: "hidden" }}
+    >
+      <Row className="justify-content-between" style={{ height: "100%" }}>
+        {/* Sidebar */}
         <Col
           md={sidebar ? 2 : 1}
           className="p-0"
@@ -78,10 +100,9 @@ const index = () => {
               onMouseLeave={() => setSidebarPointer(false)}
               onClick={() => {
                 setSidebar(!sidebar);
-                setSidebarPointer(false)
+                setSidebarPointer(false);
               }}
             >
-              {" "}
               {sidebarPointer ? (
                 <TbLayoutSidebarFilled size={22} color="white" />
               ) : (
@@ -97,23 +118,46 @@ const index = () => {
               setChatId={setChatId}
               chatId={chatId}
               chatList={chatList}
+              setChatList={setChatList}
             />
           )}
         </Col>
 
-        <Col className="ps-0" md={sidebar && 10}>
+        {/* Main Chat Area */}
+        <Col className="px-0 flex flex-column" md={sidebar && 10}>
           <ChatHeader />
-          <h3 className="text-center text-white py-5">
-            What are you working on ?
-          </h3>
-          <div className="d-flex justify-content-center">
+
+          {/* Scrollable Chat Content */}
+          <div
+            className="flex-grow-1 d-flex justify-content-center chat-viewer"
+            style={{
+              overflowY: "auto",
+            }}
+          >
+            <div className="ms-5" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
+              {conversationData?.length > 0 ? (
+                conversationData.map((data, index) => (
+                  <ChatViewer key={index} response={data.response} request ={data.message} />
+                ))
+              ) : ( conversationData.length !=0  &&
+                <h3 className="text-center text-white py-5 mt-5">
+                  What are you working on?
+                </h3>
+              )}
+            </div>
+          </div>
+
+          {/* Message Bar Fixed at Bottom */}
+          <div className="px-5 ms-5 py-2 d-grid justify-content-center">
             <MessageBar
               setMessage={setMessage}
               message={message}
               setChatId={setChatId}
               chatId={chatId}
             />
+            <p style={{fontSize:"11px"}} className=" mt-1 text-white text-center">Storm is Created by Human — It will Never Surpass Human Intelligence</p>
           </div>
+
         </Col>
       </Row>
     </div>

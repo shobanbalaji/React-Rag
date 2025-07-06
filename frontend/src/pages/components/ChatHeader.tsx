@@ -20,7 +20,7 @@ const ChatHeader: React.FC = () => {
               <BsThreeDots />
             </span>
             <img
-              src=""
+              // src=""
               alt="Profile"
               className="rounded-pill border"
               style={{ width: "25px", height: "25px" }}

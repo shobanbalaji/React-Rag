@@ -1,128 +1,84 @@
-import React from "react";
-import { Row, Form } from "react-bootstrap";
+import React, { useState, useEffect, useRef, type ChangeEvent } from "react";
+import { Row, Form, Dropdown} from "react-bootstrap";
 import type { messageListProps } from "../../types";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { MdOutlineStorm } from "react-icons/md";
+import { TbEdit } from "react-icons/tb";
+import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
+import { deleteChat, renameChat } from "../../functions/chat";
+import { UID } from "../../functions/variables/common";
+import { makeErrorToast } from "../../functions/common/common";
 const ChatList: React.FC<messageListProps> = ({
   sidebar,
   setSidebar,
   setChatId,
   chatId,
   chatList,
+  setChatList
 }) => {
   const nav = useNavigate();
+  const dropdownRef = useRef(null);
+  const [openRename, setOpenRename] = useState<boolean>(true);
+  const [renameValue, setRenameValue] = useState<string>("")
 
-  // retrieve chat
+  // set the chat id to the state and set the chat id value to the query params 
   const handleRetrieveChat = async (docId: string) => {
+    setOpenRename(true)
     setChatId(docId);
     nav(`?id=${docId}`);
   };
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>)=>{
+    const {value}=e.target;
+    setRenameValue(value.trim())
+  }
+
+  // function to toggling the sidebar values
   const hideSidebar = () => {
     setSidebar(!sidebar);
   };
 
-  const data = [
-    {
-      _id: "685f7719ce5127189af3c9cd",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:13.872000",
-      updatedAt: "2025-06-28T05:01:13.872000",
-    },
-    {
-      _id: "685f7731ce5127189af3c9ce",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:37.657000",
-      updatedAt: "2025-06-28T05:01:37.657000",
-    },
-    {
-      _id: "685f7731ce5127189af3c9cf",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:37.921000",
-      updatedAt: "2025-06-28T05:01:37.921000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d0",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.087000",
-      updatedAt: "2025-06-28T05:01:38.087000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d1",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.230000",
-      updatedAt: "2025-06-28T05:01:38.230000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d2",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.404000",
-      updatedAt: "2025-06-28T05:01:38.404000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d3",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.712000",
-      updatedAt: "2025-06-28T05:01:38.712000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d2",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.404000",
-      updatedAt: "2025-06-28T05:01:38.404000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d3",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.712000",
-      updatedAt: "2025-06-28T05:01:38.712000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d2",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.404000",
-      updatedAt: "2025-06-28T05:01:38.404000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d3",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.712000",
-      updatedAt: "2025-06-28T05:01:38.712000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d2",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.404000",
-      updatedAt: "2025-06-28T05:01:38.404000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d3",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.712000",
-      updatedAt: "2025-06-28T05:01:38.712000",
-    },
-    {
-      _id: "685f7732ce5127189af3c9d2",
-      UId: "684e893de825599ec8d09cf9",
-      chatName: "New Chat",
-      createdAt: "2025-06-28T05:01:38.404000",
-      updatedAt: "2025-06-28T05:01:38.404000",
-    },
-  ];
+  // function for Rename the chat
+  const handleRenameChat = async(e:any, chatId:string, chatName:string)=>{
+    try {
+      e.preventDefault()
+      if(chatName.trim()==renameValue.trim() || renameValue.trim() == ""){
+        return true
+      }
+      const response = await renameChat({userId:UID, c_id:chatId, c_n:renameValue});
+      if(response.code==200 && response.success){
+        const updatedName = response.data.value;
+        const updatedArray = chatList.map((data) => {
+          if (data._id === chatId) {
+            return { ...data, chatName: updatedName };
+          }
+          return data;
+        });
+        setChatList(updatedArray)
+      }
+
+      setRenameValue("");
+      setOpenRename(true);
+    } catch (error) {
+      console.error(error);
+      makeErrorToast("Failed to update chat name")
+    }
+  };
+
+  // function for delete the chat
+  const handleDeleteChat = async(chatId:string)=>{
+    try {
+      const response = await deleteChat({userId:UID, c_id:chatId});
+      if(response.code==200&&response.success){
+        const updatedChatList = chatList.filter((data)=>data._id!=response.data.value);
+        setChatList(updatedChatList)
+      }
+    } catch (error) {
+      console.error(error)
+      makeErrorToast("Failed to delete chat")
+    }
+  };
 
   return (
     <>
@@ -139,10 +95,7 @@ const ChatList: React.FC<messageListProps> = ({
           style={{ height: "10%", minHeight: "60px" }}
           className="d-flex justify-content-between align-items-center"
         >
-          <div
-            className="p-2 hover-icons"
-            onClick={() => nav("/chat?model=auto")}
-          >
+          <div className="p-2 hover-icons" onClick={() => handleRetrieveChat("auto")}>
             <MdOutlineStorm size={22} color="white" />
           </div>
 
@@ -152,6 +105,16 @@ const ChatList: React.FC<messageListProps> = ({
             onClick={hideSidebar}
           >
             <TbLayoutSidebarFilled size={25} color="white" />
+          </div>
+        </div>
+
+        <div>
+          <div
+            className="p-1 text-white d-flex gap-2 align-items-center chat-item"
+            onClick={() => handleRetrieveChat("auto")}
+          >
+            <TbEdit size={20} />
+            <p className="mb-0">New Chat</p>
           </div>
         </div>
 
@@ -167,26 +130,43 @@ const ChatList: React.FC<messageListProps> = ({
             <div
               key={index}
               style={{ height: "35px" }}
-              className={`d-flex align-items-center text-white  my-1 chat-item chat-item-${
+              className={`d-flex justify-content-between align-items-center text-white ${openRename ? "pe-2" : "pe-0"} my-1 chat-item chat-item-${
                 data._id === chatId ? "active" : "inActive"
               }`}
-              onClick={() => handleRetrieveChat(data._id)}
+              
             >
               {data._id === chatId ? (
-                <Form.Control
-                  type="text"
-                  defaultValue={data.chatName}
-                  readOnly={true}
-                  className="ps-2"
-                  style={{
-                    background: "transparent",
-                    border: "none",
-                    color: "white",
-                    height: "80%",
-                  }}
-                />
+                <Form onSubmit={(e)=>handleRenameChat(e, data._id,data.chatName)}>
+                  <Form.Control
+                    type="text"
+                    defaultValue={data.chatName}
+                    readOnly={openRename}
+                    className="ps-2"
+                    onChange={handleChange}
+                    style={{
+                      background: "transparent",
+                      border: openRename ? "none" : "1px solid white",
+                      color: "white",
+                      height: "80%",
+                    }}
+                    onClick={(e)=>handleRenameChat(e, data._id,data.chatName)}
+                  />
+                </Form>
               ) : (
-                <p className="my-2 ps-2"> {data.chatName}</p>
+                <p className="my-2 p-2 w-100" onClick={() => handleRetrieveChat(data._id)}> {data.chatName}</p>
+              )}
+              {(data._id === chatId && openRename)&& (
+                <Dropdown ref={dropdownRef}>
+                  <Dropdown.Toggle className="p-0" style={{background:"unset", border:"none"}}>
+                    <BiDotsHorizontalRounded />
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={()=>setOpenRename(false)}>Rename</Dropdown.Item>
+                    <Dropdown.Item onClick={()=>handleDeleteChat(chatId)}>Delete</Dropdown.Item>
+                  </Dropdown.Menu>
+
+                </Dropdown>
               )}
             </div>
           ))}
