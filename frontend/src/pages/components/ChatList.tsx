@@ -88,6 +88,7 @@ const ChatList: React.FC<messageListProps> = ({
           height: "100vh",
           background: "#171717",
           flexDirection: "column",
+          fontSize:"14px",
         }}
       >
         {/* Header */}

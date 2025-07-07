@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { LuSettings2, LuAudioLines } from "react-icons/lu";
 import { FaCircleArrowUp } from "react-icons/fa6";
@@ -13,37 +13,70 @@ const MessageBar: React.FC<MessageBarProps> = ({
   setMessage,
   message,
   chatId,
+  setConversationData,
+  setRequestProgress
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [sendMessage, setSendMessage] = useState<boolean>(false);
 
   // this function handles the onchange value of the message bar value and set the value into state
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = e.target;
     setMessage(value);
   };
 
   // this function handle to make a request to api and store the response values to the relevant state and handle exceptions
-  const handleClick = async () => {
+  const handleClick = async(e?: React.FormEvent | React.KeyboardEvent) => {
     try {
+      e?.preventDefault();
       if (message.trim().length == 0) {
         return true;
       }
+      setMessage("");
+      setRequestProgress(true)
       setSendMessage(true);
+      const tempId = `temp-${Date.now()}`;
+      const request = message;
+
+      // set request first in the state for user identification
+      setConversationData((prev) => [
+        ...prev,
+        {
+          chatId: tempId,
+          message: request,
+          response: "", // empty until response arrives
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ]);
       const { code, success, data } = await sendConversion({
-        message: message.trim(),
+        message: request.trim(),
         userId: UID,
         chatId: chatId,
       });
+
+      if(code==200 && success){
+        const responseData = {
+          chatId: data.chatId,
+          message: data.message,
+          response: data.response,
+          createdAt: data.createdAt,
+          updatedAt: data.updatedAt,
+        };
+       setConversationData((prev) =>
+         prev.map((item) => (item.chatId === tempId ? responseData : item))
+       );
+      }
+      setRequestProgress(false)
       if (code === 500 && !success) {
         makeErrorToast(UI_ERROR_MESSAGE);
         setSendMessage(false);
         return;
       }
-      setMessage("");
       setSendMessage(false);
     } catch (error) {
       console.error(error);
+      setRequestProgress(false)
       makeErrorToast(UI_ERROR_MESSAGE);
       setSendMessage(false);
     }
@@ -60,8 +93,8 @@ const MessageBar: React.FC<MessageBarProps> = ({
   }, [message]);
 
   return (
-    <div className="message-bar" style={{maxHeight:"200px"}}>
-      <Form onSubmit={handleClick}>
+    <div className="message-bar" style={{ maxHeight: "200px" }}>
+      <Form onSubmit={(e)=>handleClick(e)}>
         <Form.Control
           type="text"
           as={"textarea"}
@@ -70,74 +103,93 @@ const MessageBar: React.FC<MessageBarProps> = ({
           onChange={handleChange}
           value={message}
           ref={textareaRef}
-          style={{ resize: "none", overflowX: "hidden", minHeight:"75px", maxHeight:"280px"}}
+          style={{
+            resize: "none",
+            overflowX: "hidden",
+            minHeight: "75px",
+            maxHeight: "280px",
+          }}
+          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault(); // Prevents new line
+              handleClick(e); // Call your submit function
+            }
+          }}
         />
-      </Form>
 
-      {/* actions */}
-      <Row className="justify-content-between">
-        <Col>
-          <div className="d-flex gap-3 ">
-            <FiPlus
-              className="hover-icons p-1"
-              size={25}
-              color="white"
-              style={{ cursor: "pointer" }}
-            />
-            <div className="hover-icons ps-1 pe-2">
-              <LuSettings2
-                size={25}
-                className="p-1 "
-                color="white"
-                style={{ cursor: "pointer" }}
-              />{" "}
-              <span className="text-white">Tools </span>
-            </div>
-          </div>
-        </Col>
-
-        <Col>
-          <div className="d-flex gap-3 justify-content-end align-items-center">
-            <LuAudioLines
-              size={25}
-              color="white"
-              className="p-1 hover-icons"
-              style={{ cursor: "pointer" }}
-            />
-            {!sendMessage ? (
-              <FaCircleArrowUp
+        {/* actions */}
+        <Row className="justify-content-between">
+          <Col>
+            <div className="d-flex gap-3 ">
+              <FiPlus
+                className="hover-icons p-1"
                 size={25}
                 color="white"
-                type="submit"
-                className={`${
-                  message.trim().length > 0 ? "enable-submit" : "disable-submit"
-                }`}
-                onClick={handleClick}
                 style={{ cursor: "pointer" }}
               />
-            ) : (
-              <div
-                className="p-1 d-flex justify-content-center align-items-center"
-                style={{
-                  background: "#000",
-                  borderRadius: "100%",
-                  height: "30px",
-                  width: "30px",
-                }}
-              >
-                <FaSquare
-                  size={12}
+              <div className="hover-icons ps-1 pe-2">
+                <LuSettings2
+                  size={25}
+                  className="p-1 "
                   color="white"
-                  fill="white"
-                  stroke="white"
-                  onClick={() => setSendMessage(false)}
                   style={{ cursor: "pointer" }}
-                />
+                />{" "}
+                <span className="text-white">Tools </span>
               </div>
-            )}
-          </div>
-        </Col>
-      </Row>
+            </div>
+          </Col>
+
+          <Col>
+            <div className="d-flex gap-3 justify-content-end align-items-center">
+              <LuAudioLines
+                size={25}
+                color="white"
+                className="p-1 hover-icons"
+                style={{ cursor: "pointer" }}
+              />
+              {!sendMessage ? (
+                <Button
+                  type="submit"
+                  className="p-0"
+                  style={{ background: "none", border: "none" }}
+                >
+                  <FaCircleArrowUp
+                    size={25}
+                    color="white"
+                    type="submit"
+                    className={`${
+                      message.trim().length > 0
+                        ? "enable-submit"
+                        : "disable-submit"
+                    }`}
+                    onClick={(e)=>handleClick(e)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </Button>
+              ) : (
+                <div
+                  className="p-1 d-flex justify-content-center align-items-center"
+                  style={{
+                    background: "#000",
+                    borderRadius: "100%",
+                    height: "30px",
+                    width: "30px",
+                  }}
+                >
+                  <FaSquare
+                    size={12}
+                    color="white"
+                    fill="white"
+                    stroke="white"
+                    onClick={() => setSendMessage(false)}
+                    style={{ cursor: "pointer" }}
+                  />
+                </div>
+              )}
+            </div>
+          </Col>
+        </Row>
+      </Form>
     </div>
   );
 };

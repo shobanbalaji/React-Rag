@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef} from "react";
 import { useNavigate } from "react-router-dom";
 
 // UI Components
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Spinner} from "react-bootstrap";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { MdOutlineStorm } from "react-icons/md";
 
@@ -18,7 +18,6 @@ import { makeErrorToast } from "../../functions/common/common";
 // Constants & Types
 import { UI_ERROR_MESSAGE, UID } from "../../functions/variables/common";
 import type { chatListProps, conversationDataProps } from "../../types";
-import { getParamsValue } from "../../functions/utility/utility";
 import ChatViewer from "../components/ChatViewer";
 
 const index = () => {
@@ -28,7 +27,9 @@ const index = () => {
   const [chatList, setChatList] = useState<chatListProps[]>([]);
   const [sidebarPointer, setSidebarPointer] = useState<boolean>(false);
   const [conversationData, setConversationData] = useState<conversationDataProps[]>([]);
-  const nav = useNavigate();
+  const [requestProgress, setRequestProgress] = useState<boolean>(false)
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const bottomRef = useRef<HTMLDivElement>(null);
 
   // get the chat id based on the params values
   useEffect(() => {
@@ -72,6 +73,12 @@ const index = () => {
     };
     getChatData();
   }, []);
+
+  // useEffect for scroll down the page to the bottom
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [conversationData]);
+
 
   return (
     <div
@@ -130,6 +137,7 @@ const index = () => {
           {/* Scrollable Chat Content */}
           <div
             className="flex-grow-1 d-flex justify-content-center chat-viewer"
+            ref={scrollContainerRef}
             style={{
               overflowY: "auto",
             }}
@@ -137,13 +145,20 @@ const index = () => {
             <div className="ms-5" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
               {conversationData?.length > 0 ? (
                 conversationData.map((data, index) => (
+                  <div key={index}>
                   <ChatViewer key={index} response={data.response} request ={data.message} />
+                  </div>
                 ))
               ) : ( conversationData.length !=0  &&
                 <h3 className="text-center text-white py-5 mt-5">
                   What are you working on?
                 </h3>
               )}
+              {
+                requestProgress && 
+              <div className="blink-progress"style={{margin:"0 13.5rem"}}/>
+              }
+              <div ref={bottomRef} />
             </div>
           </div>
 
@@ -154,6 +169,8 @@ const index = () => {
               message={message}
               setChatId={setChatId}
               chatId={chatId}
+              setConversationData={setConversationData}
+              setRequestProgress={setRequestProgress}
             />
             <p style={{fontSize:"11px"}} className=" mt-1 text-white text-center">Storm is Created by Human — It will Never Surpass Human Intelligence</p>
           </div>
