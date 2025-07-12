@@ -1,5 +1,5 @@
 import React, { useState, type ChangeEvent } from "react";
-import { Card, Form, Button } from "react-bootstrap";
+import { Card, Form, Button, Row, Col } from "react-bootstrap";
 import { loginUser } from "../../functions/login";
 import type { loginType } from "../../types";
 import { useNavigate } from "react-router-dom";
@@ -35,56 +35,49 @@ const Login = () => {
 
   return (
     <>
-      <div
-        className="d-flex justify-content-center align-items-center"
-        style={{
-          height: "100vh",
-          width: "100vw",
-          backgroundImage: "linear-gradient(315deg, #0073cf 0%, #f2f0ef 74%)",
-        }}
-      >
-        <Card
-          className="rounded shadow-lg"
-          style={{ height: "auto", width: "450px" }}
-        >
-          <Card.Body>
-            <h4>Login</h4>
-            <Form onSubmit={handleSubmit}>
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                name="email"
-                type="text"
-                onChange={handleChange}
-              ></Form.Control>
+      <Row className="w-100 justify-content-between" style={{height:"100vh", overflowY:"auto"}}>
+        <Col md={6}>
+        <h6 className="p-3 text-white">Storm AI</h6>
 
-              <Form.Label className="my-2">Password</Form.Label>
-              <Form.Control
-                name="password"
-                type="password"
-                onChange={handleChange}
-              ></Form.Control>
+        </Col>
+        <Col md={6} className="d-grid justify-content-center align-items-center text-white">
+        <div className="text-white" style={{width:"350px"}}>
+              <Form onSubmit={handleSubmit}>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  name="email"
+                  type="text"
+                  onChange={handleChange}
+                ></Form.Control>
 
-              <span
-                className="p-1"
-                style={{
-                  fontSize: "13px",
-                  width: "fit-content",
-                  float: "right",
-                }}
-              >
-                Forgot Password ?
-              </span>
+                <Form.Label className="my-2">Password</Form.Label>
+                <Form.Control
+                  name="password"
+                  type="password"
+                  onChange={handleChange}
+                ></Form.Control>
 
-              <Button
-                className="my-4 w-100 border b-0 px-5 rounded-pill bg-dark"
-                type="submit"
-              >
-                click
-              </Button>
-            </Form>
-          </Card.Body>
-        </Card>
-      </div>
+                <span
+                  className="p-1"
+                  style={{
+                    fontSize: "13px",
+                    width: "fit-content",
+                    float: "right",
+                  }}
+                >
+                  Forgot Password ?
+                </span>
+
+                <Button
+                  className="my-4 w-100 border b-0 px-5 bg-dark"
+                  type="submit"
+                >
+                  click
+                </Button>
+              </Form>
+        </div>
+        </Col>
+      </Row>
     </>
   );
 };

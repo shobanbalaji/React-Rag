@@ -139,6 +139,17 @@ textarea::placeholder {
   animation: blink 1s infinite;
 }
 
+.hljs {
+  background: #000 !important; /* GitHub's black background */
+  color: #e6edf3;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+code span{
+  text-shadow: none !important;
+}
+
 @keyframes blink {
   0%, 100% {
     opacity: 1;

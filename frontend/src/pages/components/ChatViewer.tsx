@@ -1,44 +1,8 @@
 import React, { useState } from "react";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-
-const separateTextAndCode = (response: string) => {
-  const codeRegex = /```([\w+]*)\s*([\s\S]*?)```/g;
-  const result: {
-    type: "text" | "code";
-    content: string;
-    language?: string;
-  }[] = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  while ((match = codeRegex.exec(response)) !== null) {
-    const [fullMatch, lang, code] = match;
-    const index = match.index;
-
-    if (lastIndex < index) {
-      const text = response.slice(lastIndex, index).trim();
-      if (text) result.push({ type: "text", content: text });
-    }
-
-    result.push({
-      type: "code",
-      language: lang || "plaintext",
-      content: code.trim(),
-    });
-
-    lastIndex = index + fullMatch.length;
-  }
-
-  const remainingText = response.slice(lastIndex).trim();
-  if (remainingText) {
-    result.push({ type: "text", content: remainingText });
-  }
-
-  return result;
-};
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+// import { vs2015 } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type ChatViewerProps = {
   response: string;
@@ -46,14 +10,14 @@ type ChatViewerProps = {
 };
 
 const ChatViewer: React.FC<ChatViewerProps> = ({ request, response }) => {
-  const [copied, setCopied] = useState<boolean>(false);
+  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
-  const handleCopy = async (code:any) => {
+  const handleCopy = async (code: string, index: number) => {
     await navigator.clipboard.writeText(code);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+    setCopiedIndex(index);
+    setTimeout(() => setCopiedIndex(null), 1500);
   };
-  
+
   return (
     <div
       style={{
@@ -71,7 +35,7 @@ const ChatViewer: React.FC<ChatViewerProps> = ({ request, response }) => {
             maxWidth: "500px",
             borderRadius: "18px",
             fontSize: "15px",
-            marginLeft: "auto", // pushes element to the right
+            marginLeft: "auto",
             backgroundColor: "rgb(108 117 125 / 26%)",
             fontFamily: "Arial, Helvetica, sans-serif",
           }}
@@ -79,65 +43,99 @@ const ChatViewer: React.FC<ChatViewerProps> = ({ request, response }) => {
           {request}
         </p>
 
-        {separateTextAndCode(response).map((block, index) =>
-          block.type === "code" ? (
-            <>
-              <div style={{ position: "relative", marginBottom: "1.5rem" }}>
-                <button
-                  onClick={()=>handleCopy(block.content)}
-                  style={{
-                    position: "absolute",
-                    top: "8px",
-                    right: "10px",
-                    background: "#2d2d2d",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "5px",
-                    padding: "4px 8px",
-                    fontSize: "0.75rem",
-                    cursor: "pointer",
-                    zIndex: 1,
-                  }}
-                >
-                  {copied ? "Copied!" : "Copy"}
-                </button>
+        <div
+          className="response-markdown"
+          style={{
+            textAlign: "justify",
+            color: "#ececec",
+            fontSize: "15px",
+            fontFamily: "Arial, Helvetica, sans-serif",
+            lineHeight: "28px",
+          }}
+        >
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              code({ node, inline, className, children, ...props }) {
+                const match = /language-(\w+)/.exec(className || "");
+                const language = match?.[1] || "plaintext";
+                const code = String(children).trim();
+                const index = node?.position?.start.line || Math.random(); // fallback index
 
-                <SyntaxHighlighter
-                  language={block.language}
-                  style={vscDarkPlus}
-                  wrapLongLines
-                  customStyle={{
-                    fontFamily:
-                      "ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace",
-                    fontSize: "1.1rem",
-                    lineHeight: "1.6",
-                    borderRadius: "12px",
-                    padding: "1rem",
-                  }}
-                >
-                  {block.content}
-                </SyntaxHighlighter>
-              </div>
-            </>
-          ) : (
-            <div
-              key={index}
-              style={{
-                textAlign: "justify",
-                color: "#ececec",
-                fontSize: "15px",
-                fontFamily: "Arial, Helvetica, sans-serif",
-                lineHeight: "28px",
-              }}
-            >
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {block.content}
-              </ReactMarkdown>
-            </div>
-          )
-        )}
+                if (inline) {
+                  return (
+                    <code
+                      style={{
+                        backgroundColor: "#333",
+                        padding: "2px 6px",
+                        borderRadius: "4px",
+                        fontSize: "13px",
+                        textShadow:"none"
+                      }}
+                      {...props}
+                    >
+                      {code}
+                    </code>
+                  );
+                }
+
+                return (
+                  <div style={{ position: "relative", marginBottom: "1.5rem" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        padding: "0.3rem 1rem",
+                        background: "#1e1e1e",
+                        borderTopLeftRadius: "10px",
+                        borderTopRightRadius: "10px",
+                        fontSize: "12px",
+                        color: "#bbb",
+                        fontFamily: "monospace",
+                      }}
+                    >
+                      <span>{language}</span>
+                      <button
+                        onClick={() => handleCopy(code, index)}
+                        style={{
+                          background: "transparent",
+                          border: "1px solid #555",
+                          color: "#fff",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          fontSize: "11px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {copiedIndex === index ? "Copied!" : "Copy"}
+                      </button>
+                    </div>
+                    <SyntaxHighlighter
+                      language={language}
+                      // style={vs2015}
+                      customStyle={{
+                        padding: "1rem",
+                        margin: 0,
+                        borderBottomLeftRadius: "10px",
+                        borderBottomRightRadius: "10px",
+                        backgroundColor: "#1e1e1e",
+                        fontSize: "14px",
+                        lineHeight: "1.6",
+                      }}
+                      wrapLines
+                    >
+                      {code}
+                    </SyntaxHighlighter>
+                  </div>
+                );
+              },
+            }}
+          >
+            {response}
+          </ReactMarkdown>
+        </div>
       </div>
-      
     </div>
   );
 };
