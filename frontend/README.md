@@ -1,54 +1,95 @@
-# React + TypeScript + Vite
+# 🤖 RAG-Based AI Assistant (React + FastAPI + MongoDB)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a full-stack Retrieval-Augmented Generation (RAG) application powered by **React**, **TypeScript**, **FastAPI**, **MongoDB**, and **Sentence Transformers**. It integrates with large language models like **Gemini** and **OpenAI GPT** to generate intelligent responses from retrieved documents.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🧠 Key Features
 
-## Expanding the ESLint configuration
+- **RAG Mode**: Uses Sentence Transformers to find relevant context and then sends it to an LLM.
+- **Normal Mode**: Directly sends the user's input to the LLM (no retrieval).
+- **Model Toggle**: Switch between Gemini and GPT API dynamically.
+- **React + TypeScript UI**: Clean and modern chat interface.
+- **FastAPI Backend**: Handles embedding, retrieval, and communication with LLMs.
+- **MongoDB**: Stores source documents and vector embeddings.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## ⚙️ Setup Instructions
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### ✅ Prerequisites
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- Node.js >= 16
+- Python >= 3.9
+- MongoDB running locally or via Atlas
+- API keys for Gemini and/or OpenAI
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+---
+
+### 🔌 Backend Setup (FastAPI + Python)
+
+1. Navigate to the backend folder:
+    ```bash
+    cd backend
+    ```
+
+2. Create and activate virtual environment:
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # Windows: venv\Scripts\activate
+    ```
+
+3. Install Python dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. Create a `.env` file in `backend/`:
+
+    ```env
+    GEMINI_API_KEY=your-gemini-api-key
+    OPENAI_API_KEY=your-openai-api-key
+    MONGO_URI=mongodb://localhost:27017
+    ```
+
+5. Start FastAPI server:
+    ```bash
+    uvicorn main:app --reload
+    ```
+
+---
+
+### 💻 Frontend Setup (React + TypeScript)
+
+1. Navigate to frontend folder:
+    ```bash
+    cd frontend
+    ```
+
+2. Install dependencies:
+    ```bash
+    npm install
+    ```
+
+3. Start the development server:
+    ```bash
+    npm start
+    ```
+
+The app will run at `http://localhost:3000`.
+
+---
+
+## 🧪 API Usage
+
+### Endpoint: `POST /generate`
+
+#### Request:
+```json
+{
+  "query": "What is RAG?",
+  "mode": "rag",          // Options: "rag" or "normal"
+  "model": "gemini"       // Options: "gemini" or "gpt"
+}
+
+
