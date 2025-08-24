@@ -95,7 +95,6 @@ const index = () => {
               width: "50px",
               background: "transparent",
               borderRight: "1px solid #0000002b",
-              height: "100vh",
             }),
           }}
         >
@@ -149,7 +148,7 @@ const index = () => {
                   <ChatViewer key={index} response={data.response} request ={data.message} />
                   </div>
                 ))
-              ) : ( conversationData.length !=0  &&
+              ) : ( conversationData?.length ==0  &&
                 <h3 className="text-center text-white py-5 mt-5">
                   What are you working on?
                 </h3>

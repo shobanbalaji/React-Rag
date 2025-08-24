@@ -8,7 +8,7 @@ db = get_db()
 
 
 # create conversation
-async def createChatRequest(userId, message, chatId):
+async def createChatRequest(userId, message, chatId, file):
     try:
         # if chat id exist does not create a chat
         if chatId == "auto":
@@ -29,7 +29,7 @@ async def createChatRequest(userId, message, chatId):
         if message:
 
             # get response from Gemini API
-            request_gemini = await geminiResponse(message)
+            request_gemini = await geminiResponse(message, file)
 
             # structure and validate the payload
             payload = {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { LuSettings2, LuAudioLines } from "react-icons/lu";
 import { FaCircleArrowUp } from "react-icons/fa6";
@@ -18,6 +18,8 @@ const MessageBar: React.FC<MessageBarProps> = ({
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [sendMessage, setSendMessage] = useState<boolean>(false);
+  const [fileContent, setFileContent] = useState<any>();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // this function handles the onchange value of the message bar value and set the value into state
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -32,6 +34,8 @@ const MessageBar: React.FC<MessageBarProps> = ({
       if (message.trim().length == 0) {
         return true;
       }
+      const file = fileContent 
+      setFileContent(null)
       setMessage("");
       setRequestProgress(true)
       setSendMessage(true);
@@ -49,10 +53,13 @@ const MessageBar: React.FC<MessageBarProps> = ({
           updatedAt: new Date(),
         },
       ]);
+
       const { code, success, data } = await sendConversion({
         message: request.trim(),
         userId: UID,
         chatId: chatId,
+        type: file ? "doc" : "nor",
+        file: file 
       });
 
       if(code==200 && success){
@@ -79,8 +86,29 @@ const MessageBar: React.FC<MessageBarProps> = ({
       setRequestProgress(false)
       makeErrorToast(UI_ERROR_MESSAGE);
       setSendMessage(false);
+      setFileContent(null)
     }
   };
+
+  const handleOpenFile = () => {
+    try {
+      console.log("render")
+      fileInputRef.current?.click();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileContent(file);
+      console.log("Selected file:", file);
+      // your upload logic here
+    }
+  };
+
+  const handleOpenImage = ()=>{}
 
   // this useEffect handle the message bar height and scroll
   useEffect(() => {
@@ -94,7 +122,28 @@ const MessageBar: React.FC<MessageBarProps> = ({
 
   return (
     <div className="message-bar" style={{ maxHeight: "200px" }}>
-      <Form onSubmit={(e)=>handleClick(e)}>
+      <Form onSubmit={(e) => handleClick(e)}>
+        <Form.Control
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="file-card"
+          style={{ display: "none" }}
+        />
+
+        {fileContent && (
+          <div className="file-card">
+            <div className="remove-btn" onClick={() => setFileContent(null)}>
+              <FiPlus
+                size={16}
+                color="white"
+                style={{ transform: "rotate(45deg)" }}
+              />
+            </div>
+            <div className="filename">{fileContent?.name}</div>
+          </div>
+        )}
+
         <Form.Control
           type="text"
           as={"textarea"}
@@ -121,12 +170,28 @@ const MessageBar: React.FC<MessageBarProps> = ({
         <Row className="justify-content-between">
           <Col>
             <div className="d-flex gap-3 ">
-              <FiPlus
-                className="hover-icons p-1"
-                size={25}
-                color="white"
-                style={{ cursor: "pointer" }}
-              />
+              <Dropdown>
+                <Dropdown.Toggle
+                  className="p-0"
+                  style={{ background: "unset", border: "none" }}
+                >
+                  <FiPlus
+                    className="hover-icons p-1"
+                    size={25}
+                    color="white"
+                    style={{ cursor: "pointer" }}
+                  />
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  <Dropdown.Item onClick={handleOpenFile}>
+                    {" "}
+                    Upload File
+                  </Dropdown.Item>
+                  {/* <Dropdown.Item onClick={handleOpenImage}> Upload Image</Dropdown.Item> */}
+                </Dropdown.Menu>
+              </Dropdown>
+
               <div className="hover-icons ps-1 pe-2">
                 <LuSettings2
                   size={25}
@@ -162,7 +227,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
                         ? "enable-submit"
                         : "disable-submit"
                     }`}
-                    onClick={(e)=>handleClick(e)}
+                    onClick={(e) => handleClick(e)}
                     style={{ cursor: "pointer" }}
                   />
                 </Button>

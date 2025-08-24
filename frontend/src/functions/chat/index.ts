@@ -76,10 +76,22 @@ const deleteChat = async ({ userId, c_id }: { userId: string; c_id: string }) =>
 };
 
 // Send Conversion
-const sendConversion = async ({ userId, message, chatId }: { userId: string; message: string, chatId: string }) => {
+const sendConversion = async ({ userId, message, chatId, type, file}: { userId: string; message: string, chatId: string, type: string, file:any}) => {
     try {
-        const response = await axios.post(`${API_ENDPOINT}chat/chatRequest`, { message, c_id: chatId }, {
-            headers: { userId }
+       const formData = new FormData();
+        formData.append("message", message);
+        formData.append("c_id", chatId);
+        formData.append("c_t", type);
+
+        if (file) {
+          formData.append("file", file); // always "file"
+        }
+
+        const response = await axios.post(`${API_ENDPOINT}chat/chatRequest`, formData, {
+          headers: {
+            userId,
+            "Content-Type": "multipart/form-data",
+          },
         });
         return response.data;
     } catch (error) {

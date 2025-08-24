@@ -85,7 +85,7 @@ const ChatList: React.FC<messageListProps> = ({
       <Row
         className="ps-3"
         style={{
-          height: "100vh",
+          height: "100% ",
           background: "#171717",
           flexDirection: "column",
           fontSize:"14px",

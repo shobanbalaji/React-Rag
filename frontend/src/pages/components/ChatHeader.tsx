@@ -6,7 +6,7 @@ const ChatHeader: React.FC = () => {
   return (
     <>
       <Row
-        className="align-items-center justify-content-between ms-2 text-white"
+        className="align-items-center justify-content-between ms-3 text-white"
         style={{ borderBottom: "1px solid rgb(76 74 74)", height: "60px" }}
       >
         <Col md={10}>
