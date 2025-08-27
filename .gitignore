@@ -128,3 +128,11 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py[cod]
+backend/app/__pycache__/main.cpython-313.pyc
+backend/app/__pycache__/main.cpython-313.pyc

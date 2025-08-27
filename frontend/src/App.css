@@ -1,42 +1,191 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  max-width: 100%;
+  margin: auto;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+.message-bar {
+  border: none;
+  min-height: 80px;
+  width: 800px;
+  padding:20px;
+  border-radius: 25px;
+  background: #303030;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.message-bar .message-input {
+  border: none;
+  background: #303030;
+  color: white;
+  font-size: 15px;
+  width: 100%;
+  min-height: auto; 
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.message-input::-webkit-scrollbar{
+  width:5px !important;
+  height:5px !important;
+}
+.message-input::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* visible thumb */
+  border-radius: 1rem;
+}
+
+.message-bar .message-input:focus {
+  border: none !important;
+  box-shadow: none;
+}
+
+.message-bar .message-input:focus-within {
+  border: none !important;
+  box-shadow: none;
+  background: inherit;
+  color: white;
+}
+
+.message-bar.message-input::placeholder {
+  color: #fff !important;
+  /* Your desired color */
+}
+
+.rag-container {
+  height: 100vh !important;
+  padding: 0rem 1.5rem 0rem 1rem;
+}
+
+
+.chat-item:hover {
+  background-color: #aaaaaa17;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.message-bar.message-input::-webkit-scrollbar-thumb {
+  height: 2px !important;
+  background: red !important;
+}
+
+.chat-item-active {
+  background-color: #aaaaaa17;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.chat-item {
+  margin-top: 10px;
+}
+
+
+.chat-item input:focus {
+  box-shadow: none;
+  border: none;
+}
+
+.chat-item input:target-within {
+  box-shadow: none;
+  border: none;
+}
+
+.chat-list-bar::-webkit-scrollbar {
+  width: 0.3rem !important;
+  background-color: rgb(102, 91, 91);
+  border-radius: 1rem;
+}
+
+.chat-list-bar::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* visible thumb */
+  border-radius: 1rem;
+}
+
+.disable-submit {
+  cursor: not-allowed !important;
+  opacity: 0.5;
+}
+
+
+.hover-icons:hover {
+  background-color: rgba(212, 209, 215, 0.199);
+  border-radius: 8px;
+}
+
+.chat-viewer::-webkit-scrollbar {
+  width: 0.3rem !important;
+  background-color: transparent; /* keep track background clean */
+  border-radius: 1rem;
+}
+
+.chat-viewer::-webkit-scrollbar-thumb {
+  background-color: #b0b0b0; /* visible thumb */
+  border-radius: 1rem;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #aaa !important; /* change to any color */
+  font-weight: 500;
+  opacity: 1;  /* make sure it's fully visible */
+}
+
+.dropdown-toggle::after{
+  border: none !important;
+}
+
+.blink-progress {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: #bbc0bb; /* or any color you want */
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
   }
-  to {
-    transform: rotate(360deg);
+  50% {
+    opacity: 0;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+
+/* file-card */
+
+.file-card {
+  position: relative;
+  height: 50px;
+  width: 200px;
+  background-color: #303030;
+  border: none;
+  filter: drop-shadow(0px 2px 3px #aaa);
+  margin-bottom: 20px;
+  color: white;
+  font-size: 14px;
+  padding: 13px;
+  border-radius: 10px;
+  cursor: pointer;
+
+  /* allow cross button to show fully */
+  overflow: visible;
 }
 
-.card {
-  padding: 2em;
+.file-card .filename {
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden; /* only clips filename */
 }
 
-.read-the-docs {
-  color: #888;
+.file-card .remove-btn {
+  height: 20px;
+  width: 20px;
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff4444;
+  border-radius: 50%;
+  padding: 0px 2px 2px 1px;
+  z-index: 10;
+  cursor: pointer;
 }
+

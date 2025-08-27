@@ -1,5 +1,10 @@
 fastapi
 uvicorn
-chromadb
-sentence-transformers
+# chromadb
+# sentence-transformers
 pydantic
+pymongo
+google-generativeai
+
+passlib
+pydantic[email]
