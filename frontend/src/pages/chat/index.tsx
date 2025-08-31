@@ -72,7 +72,7 @@ const index = () => {
       }
     };
     getChatData();
-  }, []);
+  }, [chatId]);
 
   // useEffect for scroll down the page to the bottom
   useEffect(() => {
@@ -141,7 +141,7 @@ const index = () => {
               overflowY: "auto",
             }}
           >
-            <div className="ms-5" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
+            <div className="ms-5 ps-4 mt-3" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
               {conversationData?.length > 0 ? (
                 conversationData.map((data, index) => (
                   <div key={index}>
@@ -155,7 +155,7 @@ const index = () => {
               )}
               {
                 requestProgress && 
-              <div className="blink-progress"style={{margin:"0 13.5rem"}}/>
+              <div className="blink-progress"/>
               }
               <div ref={bottomRef} />
             </div>

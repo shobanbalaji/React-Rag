@@ -2,7 +2,7 @@ from app.mongo import get_db
 from pymongo import DESCENDING
 from app.models.chat.chat_model import chatModel, conversationModel, conversationResponseModel
 from app.controller.utility.common import clean_object_ids
-from app.controller.gemini.utilityGemini import geminiResponse
+from app.controller.gemini.utilityGemini import geminiResponse, generateChatSummary
 from bson import ObjectId
 db = get_db()
 
@@ -27,9 +27,22 @@ async def createChatRequest(userId, message, chatId, file):
             # }
 
         if message:
-
+            
+            current_chat = chatId if chatId and chatId != "auto" else cleaned_chat_response["_id"]
+            # check the chatId and user id already exist for generating chat title
+            checkChatAlreadyExist = db["conversation"].find_one({"UId": userId, "chatId": chatId if chatId and chatId != "auto" else cleaned_chat_response["_id"]})
+            
+            #If document not exists create a chat summary for this    
+            if not checkChatAlreadyExist:
+                generateChatTitle = await generateChatSummary(message)
+                
+                # update the relevant chat
+                updateChat = db["chat"].update_one({"_id": ObjectId(chatId if chatId and chatId != "auto" else cleaned_chat_response["_id"])}, {"$set": {"chatName": generateChatTitle}})
+                if not updateChat:
+                    return {"code": 500, "message": "Request Failed", "success": False, "data": {}}
+            
             # get response from Gemini API
-            request_gemini = await geminiResponse(message, userId, chatId, file)
+            request_gemini = await geminiResponse(message, userId, current_chat, file)
 
             # structure and validate the payload
             payload = {
@@ -121,7 +134,15 @@ async def deleteChat(userId, chatId):
     try:
       chatRef = db["chat"]
       deleteChat = chatRef.delete_one({"_id": ObjectId(chatId), "UId": userId})
+      
+
+         
       if deleteChat.deleted_count == 1:
+          
+        # If chat was delete also delete the conversation and chat Memory
+        delete_Conversation = db["conversation"].delete_many({"chatId":chatId})
+        
+        delete_chat_memory = db["chat_memory"].delete_one({"chatId":chatId})
         print("Chat deleted successfully.")
         return{
           "code":200,

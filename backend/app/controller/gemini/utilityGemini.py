@@ -73,3 +73,19 @@ async def geminiResponse(request: str, userId: str, chatId: str, file: dict = No
     except Exception as e:
         print(f"An exception occurred: {e}")
         return "Oops! Something went wrong."
+
+
+
+async def generateChatSummary(message: str) -> str:
+    model = genai.GenerativeModel("gemini-2.5-flash")
+
+    prompt = (
+        "Summarize the following message into a clear, concise summary "
+        "within 50 characters with only summary text no additional work and character dont mention and don't end with full stop :\n\n"
+        f"{message}"
+    )
+
+    response = model.generate_content(prompt)
+
+    summary = response.text.strip() if hasattr(response, "text") else ""
+    return summary[:200]  # ensure max 200 chars

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { LuSettings2, LuAudioLines } from "react-icons/lu";
@@ -13,6 +14,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
   setMessage,
   message,
   chatId,
+  setChatId,
   setConversationData,
   setRequestProgress
 }) => {
@@ -21,6 +23,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
   const [fileContent, setFileContent] = useState<any>();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [localMessage, setLocalMessage] = useState<string>("")
+  const nav = useNavigate();
 
   // this function handles the onchange value of the message bar value and set the value into state
   const handleChange = (e: any) => {
@@ -73,6 +76,9 @@ const MessageBar: React.FC<MessageBarProps> = ({
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
         };
+        nav(`?id=${data.chatId}`);
+        setChatId(data.chatId)
+
        setConversationData((prev) =>
          prev.map((item) => (item.chatId === tempId ? responseData : item))
        );
