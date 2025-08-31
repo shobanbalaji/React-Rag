@@ -29,7 +29,7 @@ async def createChatRequest(userId, message, chatId, file):
         if message:
 
             # get response from Gemini API
-            request_gemini = await geminiResponse(message, file)
+            request_gemini = await geminiResponse(message, userId, chatId, file)
 
             # structure and validate the payload
             payload = {

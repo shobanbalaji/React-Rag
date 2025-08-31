@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteChat, renameChat } from "../../functions/chat";
 import { UID } from "../../functions/variables/common";
 import { makeErrorToast } from "../../functions/common/common";
+import { IoCreateOutline } from "react-icons/io5";
 const ChatList: React.FC<messageListProps> = ({
   sidebar,
   setSidebar,
@@ -111,10 +112,10 @@ const ChatList: React.FC<messageListProps> = ({
 
         <div>
           <div
-            className="p-1 text-white d-flex gap-2 align-items-center chat-item"
+            className="p-2 text-white d-flex gap-2 align-items-center chat-item"
             onClick={() => handleRetrieveChat("auto")}
           >
-            <TbEdit size={20} />
+            <TbEdit size={23} />
             <p className="mb-0">New Chat</p>
           </div>
         </div>
@@ -137,7 +138,7 @@ const ChatList: React.FC<messageListProps> = ({
               
             >
               {data._id === chatId ? (
-                <Form onSubmit={(e)=>handleRenameChat(e, data._id,data.chatName)}>
+                <Form onSubmit={(e)=>handleRenameChat(e, data._id,data.chatName)} style={{width:"100%"}}>
                   <Form.Control
                     type="text"
                     defaultValue={data.chatName}
@@ -148,7 +149,7 @@ const ChatList: React.FC<messageListProps> = ({
                       background: "transparent",
                       border: openRename ? "none" : "1px solid white",
                       color: "white",
-                      height: "80%",
+                      fontSize:"14px"
                     }}
                     onClick={(e)=>handleRenameChat(e, data._id,data.chatName)}
                   />
