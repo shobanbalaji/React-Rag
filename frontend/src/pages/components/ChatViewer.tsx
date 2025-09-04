@@ -5,6 +5,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { useState } from "react";
 import type { Components } from "react-markdown";
+import TypingEffect from "./TypingEffect";
 
 type MessageBlock = {
   type: "text" | "code";
@@ -15,10 +16,12 @@ type MessageBlock = {
 type ChatViewerProps = {
   request: string;
   response: MessageBlock[] | string;
+  responsive: boolean;
 };
 
-export default function ChatViewer({ request, response }: ChatViewerProps) {
+export default function ChatViewer({request, response, responsive}: ChatViewerProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  console.log(responsive,"responsive")
 
   const normalizedResponse: MessageBlock[] = Array.isArray(response)
     ? response
@@ -34,9 +37,8 @@ export default function ChatViewer({ request, response }: ChatViewerProps) {
     }
   };
 
-  // ✅ fix typing here
   const components: Components = {
-    code({ node, inline, className, children, ...props }) {
+    code({ inline, className, children, ...props }) {
       const match = /language-(\w+)/.exec(className || "");
       if (!inline && match) {
         const codeContent = String(children).replace(/\n$/, "");
@@ -134,11 +136,28 @@ export default function ChatViewer({ request, response }: ChatViewerProps) {
             );
           }
 
+          // ✅ Only use TypingEffect if responsive is true
           return (
             <div key={`text-${blockIndex}`} className="text-block">
-              <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
-                {block.content}
-              </ReactMarkdown>
+              {responsive ? (
+                <TypingEffect text={block.content}>
+                  {(typedText) => (
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      components={components}
+                    >
+                      {typedText}
+                    </ReactMarkdown>
+                  )}
+                </TypingEffect>
+              ) : (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  components={components}
+                >
+                  {block.content}
+                </ReactMarkdown>
+              )}
             </div>
           );
         })}

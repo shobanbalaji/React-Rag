@@ -57,6 +57,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
           response: "", // empty until response arrives
           createdAt: new Date(),
           updatedAt: new Date(),
+          responsive:false,
         },
       ]);
 
@@ -75,6 +76,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
           response: data.response,
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
+          responsive:true
         };
         nav(`?id=${data.chatId}`);
         setChatId(data.chatId)

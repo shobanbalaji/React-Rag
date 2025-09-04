@@ -28,6 +28,7 @@ const index = () => {
   const [sidebarPointer, setSidebarPointer] = useState<boolean>(false);
   const [conversationData, setConversationData] = useState<conversationDataProps[]>([]);
   const [requestProgress, setRequestProgress] = useState<boolean>(false)
+  const [autoScroll, setAutoScroll] = useState <Boolean>(true)
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -78,6 +79,31 @@ const index = () => {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversationData]);
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) return;  
+
+    const handleScroll = () => {
+      const threshold = 50; // px from bottom to consider "at bottom"
+      const isAtBottom =
+        container.scrollHeight - container.scrollTop - container.clientHeight <
+        threshold;   
+
+      setAutoScroll(isAtBottom);
+    };   
+
+    container.addEventListener("scroll", handleScroll);
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);  
+
+  useEffect(() => {
+    if (autoScroll && bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [conversationData, requestProgress, autoScroll]);
+
+
 
 
   return (
@@ -145,7 +171,7 @@ const index = () => {
               {conversationData?.length > 0 ? (
                 conversationData.map((data, index) => (
                   <div key={index}>
-                  <ChatViewer key={index} response={data.response} request ={data.message} />
+                  <ChatViewer key={index} response={data.response} request = {data.message} responsive = {data.responsive}  />
                   </div>
                 ))
               ) : ( conversationData?.length ==0  &&
@@ -155,7 +181,7 @@ const index = () => {
               )}
               {
                 requestProgress && 
-              <div className="blink-progress"/>
+              <div className="blink-progress my-3"/>
               }
               <div ref={bottomRef} />
             </div>

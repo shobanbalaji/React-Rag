@@ -25,5 +25,6 @@ export type conversationDataProps = {
     response:string;
     createdAt:Date;
     updatedAt:Date;
+    responsive:boolean;
 }
 
