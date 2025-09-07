@@ -28,6 +28,7 @@ const index = () => {
   const [sidebarPointer, setSidebarPointer] = useState<boolean>(false);
   const [conversationData, setConversationData] = useState<conversationDataProps[]>([]);
   const [requestProgress, setRequestProgress] = useState<boolean>(false)
+  const [autoScroll, setAutoScroll] = useState <Boolean>(true)
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -49,7 +50,6 @@ const index = () => {
         const response = await fetchConversation({ chatId, userId: UID });
         setConversationData(response.data);
       } catch (error) {
-        console.error(error);
         makeErrorToast(UI_ERROR_MESSAGE);
       }
     };
@@ -67,17 +67,26 @@ const index = () => {
         }
         setChatList(data);
       } catch (error) {
-        console.error(error);
         makeErrorToast(UI_ERROR_MESSAGE);
       }
     };
     getChatData();
-  }, []);
+  }, [chatId]);
 
   // useEffect for scroll down the page to the bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversationData]);
+
+
+
+  useEffect(() => {
+    if (autoScroll && bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [conversationData, requestProgress, autoScroll]);
+
+
 
 
   return (
@@ -139,13 +148,14 @@ const index = () => {
             ref={scrollContainerRef}
             style={{
               overflowY: "auto",
+              overflowX:"hidden"
             }}
           >
-            <div className="ms-5" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
+            <div className="ms-5 ps-4 mt-3" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
               {conversationData?.length > 0 ? (
                 conversationData.map((data, index) => (
                   <div key={index}>
-                  <ChatViewer key={index} response={data.response} request ={data.message} />
+                  <ChatViewer key={index} response={data.response} request = {data.message} responsive = {data.responsive} viewContainerRef = {bottomRef}  />
                   </div>
                 ))
               ) : ( conversationData?.length ==0  &&
@@ -155,7 +165,7 @@ const index = () => {
               )}
               {
                 requestProgress && 
-              <div className="blink-progress"style={{margin:"0 13.5rem"}}/>
+              <div className="blink-progress my-3"/>
               }
               <div ref={bottomRef} />
             </div>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { LuSettings2, LuAudioLines } from "react-icons/lu";
@@ -13,6 +14,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
   setMessage,
   message,
   chatId,
+  setChatId,
   setConversationData,
   setRequestProgress
 }) => {
@@ -20,27 +22,31 @@ const MessageBar: React.FC<MessageBarProps> = ({
   const [sendMessage, setSendMessage] = useState<boolean>(false);
   const [fileContent, setFileContent] = useState<any>();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [localMessage, setLocalMessage] = useState<string>("")
+  const nav = useNavigate();
 
   // this function handles the onchange value of the message bar value and set the value into state
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: any) => {
     const { value } = e.target;
-    setMessage(value);
+    setLocalMessage(value);
   };
 
   // this function handle to make a request to api and store the response values to the relevant state and handle exceptions
   const handleClick = async(e?: React.FormEvent | React.KeyboardEvent) => {
     try {
       e?.preventDefault();
-      if (message.trim().length == 0) {
+      if (localMessage.trim().length == 0) {
         return true;
       }
-      const file = fileContent 
+      const file = fileContent;
+      const messageRequest = localMessage.trim();
       setFileContent(null)
+      setLocalMessage("");
       setMessage("");
       setRequestProgress(true)
       setSendMessage(true);
       const tempId = `temp-${Date.now()}`;
-      const request = message;
+      const request = messageRequest;
 
       // set request first in the state for user identification
       setConversationData((prev) => [
@@ -51,6 +57,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
           response: "", // empty until response arrives
           createdAt: new Date(),
           updatedAt: new Date(),
+          responsive:false,
         },
       ]);
 
@@ -69,7 +76,11 @@ const MessageBar: React.FC<MessageBarProps> = ({
           response: data.response,
           createdAt: data.createdAt,
           updatedAt: data.updatedAt,
+          responsive:true
         };
+        nav(`?id=${data.chatId}`);
+        setChatId(data.chatId)
+
        setConversationData((prev) =>
          prev.map((item) => (item.chatId === tempId ? responseData : item))
        );
@@ -82,7 +93,6 @@ const MessageBar: React.FC<MessageBarProps> = ({
       }
       setSendMessage(false);
     } catch (error) {
-      console.error(error);
       setRequestProgress(false)
       makeErrorToast(UI_ERROR_MESSAGE);
       setSendMessage(false);
@@ -92,10 +102,8 @@ const MessageBar: React.FC<MessageBarProps> = ({
 
   const handleOpenFile = () => {
     try {
-      console.log("render")
       fileInputRef.current?.click();
     } catch (error) {
-      console.error(error);
     }
   };
 
@@ -103,7 +111,6 @@ const MessageBar: React.FC<MessageBarProps> = ({
     const file = event.target.files?.[0];
     if (file) {
       setFileContent(file);
-      console.log("Selected file:", file);
       // your upload logic here
     }
   };
@@ -115,8 +122,9 @@ const MessageBar: React.FC<MessageBarProps> = ({
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "auto"; // Reset height
-      // textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
-      // textarea.style.maxHeight = `180px`; // Set new height
+      textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
+      textarea.style.maxHeight = `120px`; // Set new height
+      textarea.style.overflowY = `scroll`; // Set new height
     }
   }, [message]);
 
@@ -150,7 +158,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
           className="message-input"
           placeholder="Ask anything"
           onChange={handleChange}
-          value={message}
+          value={localMessage}
           ref={textareaRef}
           style={{
             resize: "none",
@@ -223,7 +231,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
                     color="white"
                     type="submit"
                     className={`${
-                      message.trim().length > 0
+                      localMessage.trim().length > 0
                         ? "enable-submit"
                         : "disable-submit"
                     }`}

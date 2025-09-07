@@ -1,0 +1,25 @@
+.tw-react {
+  /* white-space: pre-wrap; */
+  position: relative;
+  padding-right: .5ch;
+}
+
+.tw-react::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0.15em;
+  height: 1em;
+  background: currentColor;
+  animation: caret-blink 100ms steps(1) infinite;
+  opacity: 1;
+}
+
+.tw-react.done::after {
+  display: none;
+}
+
+@keyframes caret-blink {
+  0%, 20% { opacity: 1; }
+  31%, 100% { opacity: 0; }
+}

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
 #root {
   max-width: 100%;
   margin: auto;
@@ -7,8 +9,8 @@
 .message-bar {
   border: none;
   min-height: 80px;
-  width: 800px;
-  padding:20px;
+  width: 860px;
+  padding: 20px;
   border-radius: 25px;
   background: #303030;
 }
@@ -19,16 +21,21 @@
   color: white;
   font-size: 15px;
   width: 100%;
-  min-height: auto; 
-  font-family: Arial, Helvetica, sans-serif;
+  min-height: auto;
+  font-family: "Noto Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-optical-sizing: auto !important;
 }
 
-.message-input::-webkit-scrollbar{
-  width:5px !important;
-  height:5px !important;
+.message-input::-webkit-scrollbar {
+  width: 5px !important;
+  height: 5px !important;
 }
+
 .message-input::-webkit-scrollbar-thumb {
-  background-color: #b0b0b0; /* visible thumb */
+  background-color: #b0b0b0;
+  /* visible thumb */
   border-radius: 1rem;
 }
 
@@ -58,7 +65,7 @@
 .chat-item:hover {
   background-color: #aaaaaa17;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 11px;
 }
 
 .message-bar.message-input::-webkit-scrollbar-thumb {
@@ -69,11 +76,12 @@
 .chat-item-active {
   background-color: #aaaaaa17;
   cursor: pointer;
-  border-radius: 5px;
+  border-radius: 11px;
 }
 
 .chat-item {
   margin-top: 10px;
+  /* font-family: monospace; */
 }
 
 
@@ -94,7 +102,8 @@
 }
 
 .chat-list-bar::-webkit-scrollbar-thumb {
-  background-color: #b0b0b0; /* visible thumb */
+  background-color: #b0b0b0;
+  /* visible thumb */
   border-radius: 1rem;
 }
 
@@ -111,23 +120,26 @@
 
 .chat-viewer::-webkit-scrollbar {
   width: 0.3rem !important;
-  background-color: transparent; /* keep track background clean */
+  background-color: transparent;
   border-radius: 1rem;
 }
 
 .chat-viewer::-webkit-scrollbar-thumb {
-  background-color: #b0b0b0; /* visible thumb */
+  background-color: #b0b0b0;
+
   border-radius: 1rem;
 }
 
 input::placeholder,
 textarea::placeholder {
-  color: #aaa !important; /* change to any color */
+  color: #aaa !important;
+  /* change to any color */
   font-weight: 500;
-  opacity: 1;  /* make sure it's fully visible */
+  opacity: 1;
+  /* make sure it's fully visible */
 }
 
-.dropdown-toggle::after{
+.dropdown-toggle::after {
   border: none !important;
 }
 
@@ -135,14 +147,18 @@ textarea::placeholder {
   width: 12px;
   height: 12px;
   border-radius: 100%;
-  background-color: #bbc0bb; /* or any color you want */
+  background-color: #bbc0bb;
+  /* or any color you want */
   animation: blink 1s infinite;
 }
 
 @keyframes blink {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0;
   }
@@ -173,7 +189,8 @@ textarea::placeholder {
   display: block;
   text-overflow: ellipsis;
   white-space: nowrap;
-  overflow: hidden; /* only clips filename */
+  overflow: hidden;
+  /* only clips filename */
 }
 
 .file-card .remove-btn {
@@ -189,3 +206,273 @@ textarea::placeholder {
   cursor: pointer;
 }
 
+
+/* code block background */
+pre {
+  background-color: rgb(14 13 13) !important;
+}
+
+code {
+  background: #424242;
+  padding: 4px;
+  border-radius: 5px;
+  color: white !important;
+}
+
+h3 code {
+  font-size: 1.2rem !important;
+  margin-top: 5px !important;
+  margin-bottom: 5px !important;
+  font-weight: bold;
+}
+
+h3 {
+  margin: 10px 0px !important;
+  font-size: 1.2rem !important;
+}
+
+
+pre code {
+  background-color: transparent !important;
+}
+
+
+.chat-container {
+  width: 100%;
+  width: 860px;
+  margin: auto;
+  padding: 0 1rem;
+}
+
+.request-bubble {
+  display: flex;
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: 0;
+  margin-bottom: 1.5rem;
+  width: fit-content;
+  padding: 0.6rem 1rem;
+  border-radius: 20px;
+  background-color: #303030 !important;
+  color: #fff;
+  font-size: 1rem;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  text-align: left;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-optical-sizing: auto;
+}
+
+
+/* Response container */
+.response-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Text response */
+.text-block {
+  text-align: justify;
+  color: #ececec;
+  font-size: 1rem;
+  line-height: 1.9;
+  margin-bottom: 0.5rem;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-optical-sizing: auto;
+}
+
+/* Code response */
+.code-block {
+  font-family: "Noto Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-optical-sizing: auto !important;
+  font-size: 0.85rem !important;
+  line-height: 1.4 !important;
+  border-radius: 8px !important;
+  padding: 0.75rem !important;
+  /* max-height: 400px !important; */
+  overflow-y: auto !important;
+}
+
+pre {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-size: .875em;
+  overflow-x: scroll;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #000 !important;
+}
+
+pre div {
+  background-color: #000 !important;
+  font-size: 1rem !important;
+  font-family: "Noto Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-optical-sizing: auto !important;
+  line-height: 1.9 !important;
+  padding: 5px !important;
+  margin-bottom: 0px !important;
+}
+
+pre div code {
+  line-height: 1.9 !important;
+  font-size: 0.83rem !important;
+}
+
+ol {
+  padding-left: 0px !important;
+}
+
+pre div::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+pre div::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+pre div::-webkit-scrollbar-thumb:hover {
+  background: #777;
+}
+
+pre code {
+  display: block;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-indent: 0 !important;
+}
+
+.chat-container pre code {
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  text-indent: 0 !important;
+}
+
+
+/* chat-list-conversation */
+
+.chat-list-conversation {
+  width: -webkit-fill-available !important;
+}
+
+/* login css */
+
+
+.login-screen {
+  min-height: 100vh;
+  background-color: #000;
+  /* GitHub-like dark theme */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-wrapper {
+  height: 100vh;
+}
+
+.login-left {
+  background: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg") no-repeat center center;
+  background-size: cover;
+  /* border-radius: 20px 0 0 20px; */
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding: 40px;
+  color: #080808;
+}
+
+.login-left-content {
+  position: absolute;
+  bottom: 30%;
+}
+
+.login-left-content h2 {
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.login-left-content strong {
+  font-weight: 700;
+}
+
+.login-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  color: #fff;
+  border-radius: 0 20px 20px 0;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.login-subtitle {
+  font-size: 0.95rem;
+  color: #aaa;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login-btn {
+  width: 100%;
+  background-color: #fbbc05;
+  /* Yellow button */
+  border: none;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #ffca28;
+}
+
+.signup-text {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 0.9rem;
+}
+
+.signup-text a {
+  color: #fbbc05;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.signup-text a:hover {
+  text-decoration: underline;
+}
+
+
+.site-font {
+  font-family: "Noto Sans", sans-serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  font-optical-sizing: auto !important;
+}
