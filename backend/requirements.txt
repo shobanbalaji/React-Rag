@@ -6,5 +6,6 @@ pydantic
 pymongo
 google-generativeai
 dotenv
+python-multipart
 passlib
 pydantic[email]
