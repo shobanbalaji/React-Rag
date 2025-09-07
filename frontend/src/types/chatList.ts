@@ -17,6 +17,7 @@ export type messageListProps = {
     setChatId: (id: string) => void;
     chatList: chatListProps[];
     setChatList: (list: chatListProps[]) => void;
+    isLoading:boolean;
 }
 
 export type conversationDataProps = {

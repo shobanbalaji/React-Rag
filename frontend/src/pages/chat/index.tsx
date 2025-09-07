@@ -29,6 +29,7 @@ const index = () => {
   const [conversationData, setConversationData] = useState<conversationDataProps[]>([]);
   const [requestProgress, setRequestProgress] = useState<boolean>(false)
   const [autoScroll, setAutoScroll] = useState <Boolean>(true)
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -61,13 +62,17 @@ const index = () => {
   useEffect(() => {
     const getChatData = async () => {
       try {
+        setIsLoading(true);
         const { code, success, data } = await getUserChats({ userId: UID });
         if (code === 500 && !success) {
           makeErrorToast("Failed to fetch chat history");
+          setIsLoading(false);
         }
         setChatList(data);
+        setIsLoading(false);
       } catch (error) {
         makeErrorToast(UI_ERROR_MESSAGE);
+        setIsLoading(false);
       }
     };
     getChatData();
@@ -134,6 +139,7 @@ const index = () => {
               chatId={chatId}
               chatList={chatList}
               setChatList={setChatList}
+              isLoading={isLoading}
             />
           )}
         </Col>

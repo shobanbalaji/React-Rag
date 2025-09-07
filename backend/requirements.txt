@@ -5,6 +5,6 @@ uvicorn
 pydantic
 pymongo
 google-generativeai
-
+dotenv
 passlib
 pydantic[email]
