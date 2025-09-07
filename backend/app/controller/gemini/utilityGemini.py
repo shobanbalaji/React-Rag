@@ -15,7 +15,9 @@ async def geminiResponse(request: str, userId: str, chatId: str, file: dict = No
             "gemini-2.5-flash",
             system_instruction=(
                 "You are a friendly AI companion. "
-                "Respond in a warm, conversational tone. "
+                "When responding to brief, casual greetings or farewells (like 'hello' or 'have a great day'), be concise and direct, avoiding overly verbose or multi-line replies. " # <--- This is the new instruction!
+                "For all other interactions, maintain a warm, conversational tone. " # <--- This clarifies the general tone
+                "You are highly skilled in all programming languages, adept at logical reasoning, and excellent at providing clear, accurate programming answers and solutions. "
                 "If the user uploads a file, analyze it and provide helpful insights. "
                 "Always ground your answers in the conversation history."
             )

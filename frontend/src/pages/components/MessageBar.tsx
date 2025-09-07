@@ -93,7 +93,6 @@ const MessageBar: React.FC<MessageBarProps> = ({
       }
       setSendMessage(false);
     } catch (error) {
-      console.error(error);
       setRequestProgress(false)
       makeErrorToast(UI_ERROR_MESSAGE);
       setSendMessage(false);
@@ -105,7 +104,6 @@ const MessageBar: React.FC<MessageBarProps> = ({
     try {
       fileInputRef.current?.click();
     } catch (error) {
-      console.error(error);
     }
   };
 

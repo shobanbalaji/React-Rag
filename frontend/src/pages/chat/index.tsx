@@ -50,7 +50,6 @@ const index = () => {
         const response = await fetchConversation({ chatId, userId: UID });
         setConversationData(response.data);
       } catch (error) {
-        console.error(error);
         makeErrorToast(UI_ERROR_MESSAGE);
       }
     };
@@ -68,7 +67,6 @@ const index = () => {
         }
         setChatList(data);
       } catch (error) {
-        console.error(error);
         makeErrorToast(UI_ERROR_MESSAGE);
       }
     };
@@ -80,22 +78,7 @@ const index = () => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversationData]);
 
-  useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;  
 
-    const handleScroll = () => {
-      const threshold = 50; // px from bottom to consider "at bottom"
-      const isAtBottom =
-        container.scrollHeight - container.scrollTop - container.clientHeight <
-        threshold;   
-
-      setAutoScroll(isAtBottom);
-    };   
-
-    container.addEventListener("scroll", handleScroll);
-    return () => container.removeEventListener("scroll", handleScroll);
-  }, []);  
 
   useEffect(() => {
     if (autoScroll && bottomRef.current) {
@@ -165,13 +148,14 @@ const index = () => {
             ref={scrollContainerRef}
             style={{
               overflowY: "auto",
+              overflowX:"hidden"
             }}
           >
             <div className="ms-5 ps-4 mt-3" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
               {conversationData?.length > 0 ? (
                 conversationData.map((data, index) => (
                   <div key={index}>
-                  <ChatViewer key={index} response={data.response} request = {data.message} responsive = {data.responsive}  />
+                  <ChatViewer key={index} response={data.response} request = {data.message} responsive = {data.responsive} viewContainerRef = {bottomRef}  />
                   </div>
                 ))
               ) : ( conversationData?.length ==0  &&

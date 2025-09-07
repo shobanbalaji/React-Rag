@@ -62,7 +62,6 @@ const ChatList: React.FC<messageListProps> = ({
       setRenameValue("");
       setOpenRename(true);
     } catch (error) {
-      console.error(error);
       makeErrorToast("Failed to update chat name")
     }
   };
@@ -76,7 +75,6 @@ const ChatList: React.FC<messageListProps> = ({
         setChatList(updatedChatList)
       }
     } catch (error) {
-      console.error(error)
       makeErrorToast("Failed to delete chat")
     }
   };
@@ -84,7 +82,7 @@ const ChatList: React.FC<messageListProps> = ({
   return (
     <>
       <Row
-        className="ps-3"
+        className="ps-3 site-font"
         style={{
           height: "100% ",
           background: "#171717",
