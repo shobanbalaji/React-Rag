@@ -9,14 +9,15 @@ import { useNavigate } from "react-router-dom";
 import { deleteChat, renameChat } from "../../functions/chat";
 import { UID } from "../../functions/variables/common";
 import { makeErrorToast } from "../../functions/common/common";
-import { IoCreateOutline } from "react-icons/io5";
+import Loader from "./Loader";
 const ChatList: React.FC<messageListProps> = ({
   sidebar,
   setSidebar,
   setChatId,
   chatId,
   chatList,
-  setChatList
+  setChatList,
+  isLoading
 }) => {
   const nav = useNavigate();
   const dropdownRef = useRef(null);
@@ -125,7 +126,8 @@ const ChatList: React.FC<messageListProps> = ({
             flex: 1,
             overflowY: "auto",
           }}
-        >
+        > 
+          {isLoading && <Loader/>}
           {chatList?.map((data, index) => (
             <div
               key={index}
