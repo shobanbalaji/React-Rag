@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins =["https://storm-backend.onrender.com"]
+origins =["https://storm-backend.onrender.com", "https://stormai.web.app", "https://stormai.firebaseapp.com"]
 
 # Allow all origins (for development)
 app.add_middleware(
