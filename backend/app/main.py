@@ -7,11 +7,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
+origins =["https://storm-backend.onrender.com"]
 
 # Allow all origins (for development)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Or specify domains: ["http://localhost:3000"]
+    allow_origins=origins,  # Or specify domains: ["http://localhost:3000"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, type ChangeEvent } from "react";
+import React, { useState, useRef, type ChangeEvent } from "react";
 import { Row, Form, Dropdown} from "react-bootstrap";
 import type { messageListProps } from "../../types";
 import { TbLayoutSidebarFilled } from "react-icons/tb";

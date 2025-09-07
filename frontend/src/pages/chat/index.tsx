@@ -1,8 +1,7 @@
 import { useEffect, useState, useRef} from "react";
-import { useNavigate } from "react-router-dom";
 
 // UI Components
-import { Row, Col, Spinner} from "react-bootstrap";
+import { Row, Col,} from "react-bootstrap";
 import { TbLayoutSidebarFilled } from "react-icons/tb";
 import { MdOutlineStorm } from "react-icons/md";
 
@@ -48,8 +47,10 @@ const index = () => {
   
     const fetchConversationData = async () => {
       try {
+        setAutoScroll(!autoScroll)
         const response = await fetchConversation({ chatId, userId: UID });
         setConversationData(response.data);
+        setAutoScroll(!autoScroll)
       } catch (error) {
         makeErrorToast(UI_ERROR_MESSAGE);
       }

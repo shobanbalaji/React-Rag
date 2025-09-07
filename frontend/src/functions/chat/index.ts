@@ -20,7 +20,7 @@ const getUserChats = async ({ userId }: { userId: string }) => {
 };
 
 // Create Chat
-const createChat = async ({ userId, message, c_id }: { userId: string, message?: string, c_id?: string }) => {
+const createChat = async ({ userId }: { userId: string, message?: string, c_id?: string }) => {
     try {
         const response = await axios.post(`${API_ENDPOINT}chat/createChat`, {
             // message,
