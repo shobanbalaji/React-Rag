@@ -7,12 +7,12 @@ const loginUser = async (form: loginType) => {
     return response.data;
 }
 
-const checkUserExist = async(userId, {userId:str}) => {
-    const response = await axios.get("authenticate/verifyUser", userId);
-    return response.data
-}
+// const checkUserExist = async(userId, {userId:string}) => {
+//     const response = await axios.get("authenticate/verifyUser", userId);
+//     return response.data
+// }
 
 export {
     loginUser,
-    checkUserExist
+    // checkUserExist
 }

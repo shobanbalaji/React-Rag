@@ -1,6 +1,6 @@
 import React, { useState, type ChangeEvent } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import { Card, Form, Button } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import { loginUser } from "../../functions/login";
 import type { loginType } from "../../types";
 import { useNavigate } from "react-router-dom";

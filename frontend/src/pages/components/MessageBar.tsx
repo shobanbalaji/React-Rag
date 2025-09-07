@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, type ChangeEvent } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
@@ -115,7 +115,6 @@ const MessageBar: React.FC<MessageBarProps> = ({
     }
   };
 
-  const handleOpenImage = ()=>{}
 
   // this useEffect handle the message bar height and scroll
   useEffect(() => {
