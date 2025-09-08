@@ -7,13 +7,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-origins =["https://storm-backend.onrender.com", "https://stormai.web.app", "https://stormai.firebaseapp.com"]
+origins =["https://storm-backend.onrender.com", "https://stormai.web.app", "https://stormai.firebaseapp.com","http://localhost:5173"]
 
 # Allow all origins (for development)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # Or specify domains: ["http://localhost:3000"]
     allow_credentials=True,
+    # allow_origins=origins,  # Or specify domains: ["http://localhost:3000"]
+    allow_origins=["*"],  # Or specify domains: ["http://localhost:3000"]
     allow_methods=["*"],
     allow_headers=["*"],
 )
