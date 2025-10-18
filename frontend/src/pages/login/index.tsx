@@ -17,6 +17,7 @@ const Login: React.FC = () => {
       const login = await loginUser(form);
       if (login.success && login.code == 200 && login.data.length != 0) {
         sessionStorage.setItem("userCred", JSON.stringify(login.data[0]));
+        localStorage.setItem("userCred", JSON.stringify(login.data[0]));
         nav("/chat");
       } else {
         makeWarningToast("Invalid Email or Password !");

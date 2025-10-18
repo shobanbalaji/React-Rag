@@ -4,10 +4,10 @@ import { API_ENDPOINT, INTERNAL_SERVER_ERROR } from "../variables/common";
 // Get User Chats
 const getUserChats = async ({ userId }: { userId: string }) => {
     try {
+        console.log(userId,"")
         const response = await axios.get(`${API_ENDPOINT}chat/getChat`, {
             headers: { userId }
         });
-        console.log(response, "response")
         return response.data;
     } catch (error) {
         console.error(error);
