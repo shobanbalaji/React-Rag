@@ -1,15 +1,28 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { BsThreeDots } from "react-icons/bs";
+import { BsThreeDots, BsLayoutSidebar } from "react-icons/bs";
 
-const ChatHeader: React.FC = () => {
+// Define only the props you need
+interface ChatHeaderProps {
+  sidebar: boolean;
+  setSidebar: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
   return (
     <>
       <Row
         className="align-items-center justify-content-between ms-3 text-white"
+        id="chat-header-wrapper"
         style={{ borderBottom: "1px solid rgb(76 74 74)", height: "60px" }}
       >
-        <Col md={10}>
+        <Col md={10} className="d-flex gap-3 align-items-center">
+          <BsLayoutSidebar
+            size={16}
+            color="white"
+            className="sidebar-mobile"
+            onClick={() => setSidebar(!sidebar)}
+          />
           <p className="fw-bold mb-0">Storm AI</p>
         </Col>
 
@@ -20,7 +33,6 @@ const ChatHeader: React.FC = () => {
               <BsThreeDots />
             </span>
             <img
-              // src=""
               alt="Profile"
               className="rounded-pill border"
               style={{ width: "25px", height: "25px" }}
