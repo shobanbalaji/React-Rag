@@ -1,9 +1,10 @@
 import React, { useState, useRef, type ChangeEvent } from "react";
 import { Row, Form, Dropdown} from "react-bootstrap";
 import type { messageListProps } from "../../types";
-import { TbLayoutSidebarFilled } from "react-icons/tb";
-import { MdOutlineStorm } from "react-icons/md";
-import { TbEdit } from "react-icons/tb";
+
+import { BsLayoutSidebar } from "react-icons/bs";
+import { IoIosThunderstorm } from "react-icons/io";
+import { FiEdit } from "react-icons/fi";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { deleteChat, renameChat } from "../../functions/chat";
@@ -29,6 +30,14 @@ const ChatList: React.FC<messageListProps> = ({
     setOpenRename(true)
     setChatId(docId);
     nav(`?id=${docId}`);
+
+const width = window.innerWidth;
+const height = window.innerHeight;
+
+if (width <= 768 && height <= 1024) {
+  setSidebar(false);
+}
+
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>)=>{
@@ -93,11 +102,11 @@ const ChatList: React.FC<messageListProps> = ({
       >
         {/* Header */}
         <div
-          style={{ height: "10%", minHeight: "60px" }}
-          className="d-flex justify-content-between align-items-center"
+          style={{ minHeight: "40px" }}
+          className="d-flex justify-content-between align-items-center mt-3"
         >
-          <div className="p-2 hover-icons" onClick={() => handleRetrieveChat("auto")}>
-            <MdOutlineStorm size={22} color="white" />
+          <div className="p-2" style={{cursor:"pointer"}} onClick={() => handleRetrieveChat("auto")}>
+            <IoIosThunderstorm  size={25} color="white"/>
           </div>
 
           <div
@@ -105,17 +114,17 @@ const ChatList: React.FC<messageListProps> = ({
             style={{ cursor: "pointer" }}
             onClick={hideSidebar}
           >
-            <TbLayoutSidebarFilled size={25} color="white" />
+            <BsLayoutSidebar size={16} color="white" />
           </div>
         </div>
 
         <div>
           <div
-            className="p-2 text-white d-flex gap-2 align-items-center chat-item"
+            className="text-white d-flex gap-2 align-items-center chat-item"
             onClick={() => handleRetrieveChat("auto")}
           >
-            <TbEdit size={23} />
-            <p className="mb-0">New Chat</p>
+            <FiEdit size={17} />
+            <p className="mb-0">New chat</p>
           </div>
         </div>
 

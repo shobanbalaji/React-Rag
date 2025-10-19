@@ -2,7 +2,7 @@ import { useEffect, useState, useRef} from "react";
 
 // UI Components
 import { Row, Col,} from "react-bootstrap";
-import { TbLayoutSidebarFilled } from "react-icons/tb";
+import { BsLayoutSidebar } from "react-icons/bs";
 import { MdOutlineStorm } from "react-icons/md";
 
 // Components
@@ -34,6 +34,14 @@ const index = () => {
 
   // get the chat id based on the params values
   useEffect(() => {
+
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    if (width <= 768 && height <= 1024) {
+      setSidebar(false);
+    }
+
     const params = new URLSearchParams(window.location.search);
     const paramValue = params.get("id");
     if (paramValue) {
@@ -77,7 +85,7 @@ const index = () => {
       }
     };
     getChatData();
-  }, [chatId]);
+  }, []);
 
   // useEffect for scroll down the page to the bottom
   useEffect(() => {
@@ -104,10 +112,10 @@ const index = () => {
         {/* Sidebar */}
         <Col
           md={sidebar ? 2 : 1}
-          className="p-0"
+          className= {`p-0 chat-sidebar sidebar ${sidebar ? "sidebar-true":"sidebar-false"}`} 
           style={{
             ...(!sidebar && {
-              width: "50px",
+              width: "80px",
               background: "transparent",
               borderRight: "1px solid #0000002b",
             }),
@@ -115,8 +123,8 @@ const index = () => {
         >
           {!sidebar && (
             <div
-              className="p-1 hover-icons w-75 text-center mt-3 ms-1"
-              style={{ cursor: "pointer" }}
+              className="p-1 hover-icons text-center mt-3"
+              style={{ cursor: "pointer", marginInline:"28px 21px"}}
               onMouseEnter={() => setSidebarPointer(true)}
               onMouseLeave={() => setSidebarPointer(false)}
               onClick={() => {
@@ -125,7 +133,7 @@ const index = () => {
               }}
             >
               {sidebarPointer ? (
-                <TbLayoutSidebarFilled size={22} color="white" />
+              <BsLayoutSidebar size={16} color="white" />
               ) : (
                 <MdOutlineStorm size={22} color="white" />
               )}
@@ -147,26 +155,26 @@ const index = () => {
 
         {/* Main Chat Area */}
         <Col className="px-0 flex flex-column" md={sidebar && 10}>
-          <ChatHeader />
+          <ChatHeader setSidebar={setSidebar} sidebar ={sidebar}/>
 
           {/* Scrollable Chat Content */}
           <div
-            className="flex-grow-1 d-flex justify-content-center chat-viewer"
+            className={`d-flex justify-content-center chat-viewer ${conversationData?.length === 0 ? "content-min" : "content-max"}`}
             ref={scrollContainerRef}
             style={{
               overflowY: "auto",
               overflowX:"hidden"
             }}
           >
-            <div className="ms-5 ps-4 mt-3" style={{height: conversationData.length === 0 ? "25vh" : "65vh"}}>
+            <div className={`mt-3 chat-content `} style={{height: conversationData?.length === 0 ? "25vh" : "78vh", width:"55%"}}>
               {conversationData?.length > 0 ? (
-                conversationData.map((data, index) => (
+                conversationData?.map((data, index) => (
                   <div key={index}>
                   <ChatViewer key={index} response={data.response} request = {data.message} responsive = {data.responsive} viewContainerRef = {bottomRef}  />
                   </div>
                 ))
               ) : ( conversationData?.length ==0  &&
-                <h3 className="text-center text-white py-5 mt-5">
+                <h3 className="text-center text-white intro-text">
                   What are you working on?
                 </h3>
               )}
@@ -179,7 +187,7 @@ const index = () => {
           </div>
 
           {/* Message Bar Fixed at Bottom */}
-          <div className="px-5 ms-5 py-2 d-grid justify-content-center">
+          <div className="px-5 ms-5 py-2 d-flex justify-content-center" id="message-bar-wrapper">
             <MessageBar
               setMessage={setMessage}
               message={message}
@@ -188,10 +196,10 @@ const index = () => {
               setConversationData={setConversationData}
               setRequestProgress={setRequestProgress}
             />
-            <p style={{fontSize:"11px"}} className=" mt-1 text-white text-center">Storm is Created by Human — It will Never Surpass Human Intelligence</p>
           </div>
 
         </Col>
+
       </Row>
     </div>
   );

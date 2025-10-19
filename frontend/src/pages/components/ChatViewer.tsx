@@ -5,6 +5,9 @@
   import { useState } from "react";
   import type { Components } from "react-markdown";
   import TypingEffect from "./TypingEffect";
+  import { IoCopyOutline } from "react-icons/io5";
+  import { IoIosCheckmark } from "react-icons/io";
+
 
   type MessageBlock = {
     type: "text" | "code";
@@ -50,17 +53,17 @@
                   position: "absolute",
                   top: "8px",
                   right: "10px",
-                  background: "#2d2d2d",
+                  background: "transparent",
                   color: "white",
                   border: "none",
-                  borderRadius: "5px",
-                  padding: "4px 8px",
-                  fontSize: "0.75rem",
+                  // borderRadius: "5px",
+                  padding: "0px",
+                  // fontSize: "0.75rem",
                   cursor: "pointer",
                   zIndex: 1,
                 }}
               >
-                {copiedKey === uniqueKey ? "Copied!" : "Copy"}
+                {copiedKey === uniqueKey ? <IoIosCheckmark size={25}/> : <IoCopyOutline/> }
               </button>
               <SyntaxHighlighter
                 style={vscDarkPlus}
