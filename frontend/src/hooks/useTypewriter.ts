@@ -11,7 +11,7 @@ export function useTypewriter(
   opts: TypewriterOptions = {},
   viewContainerRef?: React.RefObject<HTMLElement>
 ): string {
-  const { speed = 12, randomness = 0.2, punctPause = 120 } = opts;
+  const { speed = 12, randomness = 0.1, punctPause = 12 } = opts;
   const [out, setOut] = useState("");
 
   useEffect(() => {

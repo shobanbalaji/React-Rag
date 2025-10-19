@@ -13,8 +13,7 @@ origins =["https://storm-backend.onrender.com", "https://stormai.web.app", "http
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    # allow_origins=origins,  # Or specify domains: ["http://localhost:3000"]
-    allow_origins=["*"],  # Or specify domains: ["http://localhost:3000"]
+    allow_origins=origins,  # Or specify domains: ["http://localhost:3000"]
     allow_methods=["*"],
     allow_headers=["*"],
 )
