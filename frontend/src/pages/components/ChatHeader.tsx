@@ -1,6 +1,8 @@
 import React from "react";
 import { Row, Col } from "react-bootstrap";
-import { BsThreeDots, BsLayoutSidebar } from "react-icons/bs";
+import { BsLayoutSidebar } from "react-icons/bs";
+import { IoIosLogOut } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 // Define only the props you need
 interface ChatHeaderProps {
@@ -9,6 +11,20 @@ interface ChatHeaderProps {
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
+
+  const nav = useNavigate();
+
+  
+    const handleLogout = () =>{
+    try {
+      sessionStorage.setItem("userCred", "");
+      localStorage.setItem("userCred", "");
+      nav("/")
+    } catch (error) {
+      console.error(error)
+    }
+  };
+
   return (
     <>
       <Row
@@ -30,7 +46,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
           <div className="d-flex align-items-center justify-content-end gap-3">
             <p className="mb-0">Share</p>
             <span>
-              <BsThreeDots />
+              <IoIosLogOut size={20} style={{cursor:"pointer"}} onClick={handleLogout}/>
             </span>
             <img
               alt="Profile"

@@ -27,17 +27,16 @@ const ChatList: React.FC<messageListProps> = ({
 
   // set the chat id to the state and set the chat id value to the query params 
   const handleRetrieveChat = async (docId: string) => {
-    setOpenRename(true)
+    setOpenRename(true);
     setChatId(docId);
     nav(`?id=${docId}`);
 
-const width = window.innerWidth;
-const height = window.innerHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
-if (width <= 768 && height <= 1024) {
-  setSidebar(false);
-}
-
+    if (width <= 768 && height <= 1024) {
+      setSidebar(false);
+    }
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>)=>{
@@ -83,6 +82,8 @@ if (width <= 768 && height <= 1024) {
       if(response.code==200&&response.success){
         const updatedChatList = chatList.filter((data)=>data._id!=response.data.value);
         setChatList(updatedChatList)
+        handleRetrieveChat("auto")
+
       }
     } catch (error) {
       makeErrorToast("Failed to delete chat")
