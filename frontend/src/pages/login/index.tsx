@@ -1,28 +1,34 @@
 import React, { useState, type ChangeEvent } from "react";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row, Spinner} from "react-bootstrap";
 import { Form, Button } from "react-bootstrap";
 import { loginUser } from "../../functions/login";
 import type { loginType } from "../../types";
 import { useNavigate } from "react-router-dom";
 import { makeWarningToast } from "../../functions/common/common";
+
 const Login: React.FC = () => {
   const [form, setForm] = useState<loginType>({ email: "", password: "" });
   const nav = useNavigate();
+  const[loading, setLoading] = useState<boolean>(false)
 
   // this function handle the submit functionality and make request to api to validate the user and also handle the exceptions
   // store the basic user value to session storage for quick access
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       e.preventDefault();
+      setLoading(true)
       const login = await loginUser(form);
       if (login.success && login.code == 200 && login.data.length != 0) {
         sessionStorage.setItem("userCred", JSON.stringify(login.data[0]));
         localStorage.setItem("userCred", JSON.stringify(login.data[0]));
+        setLoading(false)
         nav("/chat");
       } else {
         makeWarningToast("Invalid Email or Password !");
+        setLoading(false)
       }
     } catch (error) {
+      setLoading(false)
       console.error(error);
     }
   };
@@ -34,58 +40,52 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-screen">
+    <div className="login-right">
       <Container fluid>
-        <Row className="login-wrapper">
-          {/* Left Side with Image */}
-          <Col md={6} className="login-left d-none d-md-block">
-            <div className="login-left-content">
-              <h2>
-                Be a Part of <br />
-                Something <strong>Beautiful</strong>
-              </h2>
-            </div>
-          </Col>
+        <Row className="login-wrapper justify-content-between align-items-center" style={{
+              height: "100vh",
+            }}>
+
+            <h5 className="text-white" style={{position:"absolute", top:"2%"}}>Storm AI</h5>
+
 
           {/* Right Side with Form */}
-          <Col md={6} className="login-right">
-            <div className="login-form">
-              <h3 className="login-title">Login</h3>
-              <p className="login-subtitle">
-                Enter your credentials to access your account
-              </p>
+          <Col md={6} className="text-white mt-5 login-card" style={{width:"40%"}}>
+            <div className="login-form px-4 py-3 mx-5" id="login-form-card" style={{borderRadius:"15px"}}>
+              <h5 className="login-title py-4">Welcome back</h5>
 
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formEmail">
-                  <Form.Label>Email</Form.Label>
+                  {/* <Form.Label>Username</Form.Label> */}
                   <Form.Control
                     type="email"
                     name="email"
-                    placeholder="name@example.com"
+                    placeholder="Mail"
+                    style={{backgroundColor:"transparent", border:"1px solid #aaa"}}
                     onChange={handleChange}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-3" controlId="formPassword">
-                  <Form.Label>Password</Form.Label>
+                  {/* <Form.Label>Password</Form.Label> */}
                   <Form.Control
                     name="password"
                     type="password"
-                    placeholder="••••••••"
+                    placeholder="Password"
+                    style={{backgroundColor:"transparent", border:"1px solid #aaa"}}
                     onChange={handleChange}
                   />
                 </Form.Group>
 
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <Form.Check type="checkbox" label="Remember me" />
-                </div>
+                <Button type="submit" className="w-100 bg-dark" disabled = {loading} style={{border:"none"}}>
 
-                <Button type="submit" className="login-btn">
+                  {loading && <Spinner size="sm" className="mx-1"/> }
+                  
                   Login
                 </Button>
 
                 <p className="signup-text">
-                  Not a member? <a href="#">Create an account</a>
+                  Does not have a account? <a href="#">Sign up for free</a>
                 </p>
               </Form>
             </div>
