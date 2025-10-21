@@ -1,16 +1,14 @@
 import axios from "axios";
 import { API_ENDPOINT, INTERNAL_SERVER_ERROR } from "../variables/common";
-
+import { UID } from "../variables/common";
 // Get User Chats
 const getUserChats = async ({ userId }: { userId: string }) => {
     try {
-        console.log(userId,"")
         const response = await axios.get(`${API_ENDPOINT}chat/getChat`, {
-            headers: { userId }
+            headers: { userId:userId || UID  }
         });
         return response.data;
     } catch (error) {
-        console.error(error);
         return {
             code: 500,
             message: `${INTERNAL_SERVER_ERROR} : ${error}`,
@@ -26,11 +24,10 @@ const createChat = async ({ userId }: { userId: string, message?: string, c_id?:
             // message,
             // c_id
         }, {
-            headers: { userId }
+            headers: { userId:userId || UID  }
         });
         return response.data;
     } catch (error) {
-        console.error(error);
         return {
             code: 500,
             message: `${INTERNAL_SERVER_ERROR} : ${error}`,
@@ -45,11 +42,10 @@ const renameChat = async ({ userId, c_id, c_n }: { userId: string, c_id: string,
         const response = await axios.patch(`${API_ENDPOINT}chat/renameChat`, {
             c_id, c_n
         }, {
-            headers: { userId }
+            headers: { userId:userId || UID  }
         });
         return response.data;
     } catch (error) {
-        console.error(error);
         return {
             code: 500,
             message: `${INTERNAL_SERVER_ERROR} : ${error}`,
@@ -62,11 +58,10 @@ const renameChat = async ({ userId, c_id, c_n }: { userId: string, c_id: string,
 const deleteChat = async ({ userId, c_id }: { userId: string; c_id: string }) => {
     try {
         const response = await axios.delete(`${API_ENDPOINT}chat/deleteChat/${c_id}`, {
-            headers: { userId },
+            headers: { userId:userId || UID  },
         });
         return response.data;
     } catch (error) {
-        console.error(error);
         return {
             code: 500,
             message: `${INTERNAL_SERVER_ERROR} : ${error}`,
@@ -89,13 +84,12 @@ const sendConversion = async ({ userId, message, chatId, type, file}: { userId: 
 
         const response = await axios.post(`${API_ENDPOINT}chat/chatRequest`, formData, {
           headers: {
-            userId,
+            userId:userId || UID,
             "Content-Type": "multipart/form-data",
           },
         });
         return response.data;
     } catch (error) {
-        console.error(error);
         return {
             code: 500,
             message: `${INTERNAL_SERVER_ERROR} : ${error}`,
@@ -112,7 +106,6 @@ const fetchConversation = async ({ userId, chatId }: { userId: string, chatId: s
         });
         return response.data;
     } catch (error) {
-        console.error(error);
         return {
             code: 500,
             message: `${INTERNAL_SERVER_ERROR} : ${error}`,

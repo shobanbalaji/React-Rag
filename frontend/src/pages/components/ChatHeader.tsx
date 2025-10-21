@@ -21,7 +21,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
       localStorage.setItem("userCred", "");
       nav("/")
     } catch (error) {
-      console.error(error)
     }
   };
 

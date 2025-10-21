@@ -458,6 +458,23 @@ pre code {
 }
 
 
+.login-form .form-control, .login-right .form-control, .login-form select, .login-right select{
+  border-radius: 0px;
+  border: none !important;
+  border-bottom: 1px solid #aaa !important;
+  background-color: transparent !important;
+  color: white !important;
+}
+
+.login-form .form-control:focus, .login-right .form-control:focus, .login-form select, .login-right select{
+  box-shadow: none !important;
+}
+
+ .login-form select option, .login-right select option{
+  background-color: rgba(32, 30, 30, 0.673) !important;
+  color: rgb(255, 255, 255);
+ }
+
 /* login css */
 
 .signup-text {

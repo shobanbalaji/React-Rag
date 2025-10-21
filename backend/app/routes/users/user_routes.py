@@ -1,10 +1,11 @@
 from fastapi import APIRouter
 from app.controller.users.user_controller import get_current_user, create_user
 from pydantic import BaseModel
+from app.models.user.user_model import createUserModel
 router = APIRouter()
 
 @router.get("/getAllUsers")
-def getCurrentUserData():
+async def getCurrentUserData():
     return get_current_user()
 
 
@@ -16,5 +17,5 @@ class UserPayload(BaseModel):
 
 
 @router.post("/createUser")
-async def getCurrentUserData(payload: UserPayload):
-    return await create_user(payload)
+async def createUser(payload: createUserModel):
+    return create_user(payload)
