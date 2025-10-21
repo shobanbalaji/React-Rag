@@ -66,6 +66,28 @@ async def get_documents(collection_name: str, query: dict, exclude_fields: list 
             "success": False,
         }
 
+def check_document_exist(collection_name: str, key: str, value: any):
+    try:
+        if not collection_name or not key or value is None:
+            return {"success": False, "message": "Payload missing", "data": None}
+
+        # ✅ Await the async MongoDB query
+        document = db[collection_name].find_one({key: value})
+
+        if document:
+            document["_id"] = str(document["_id"])  # convert ObjectId to string
+            return {"success": True, "message": "Document found", "data": document}
+        else:
+            return {"success": False, "message": "Document not found", "data": None}
+
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"Error while checking document: {str(e)}",
+            "data": None
+        }
+
+    
 
 def clean_object_ids(data):
     if isinstance(data, dict):

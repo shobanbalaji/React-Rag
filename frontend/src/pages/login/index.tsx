@@ -22,14 +22,13 @@ const Login: React.FC = () => {
         sessionStorage.setItem("userCred", JSON.stringify(login.data[0]));
         localStorage.setItem("userCred", JSON.stringify(login.data[0]));
         setLoading(false)
-        nav("/chat");
+        nav("/chat?id=auto");
       } else {
         makeWarningToast("Invalid Email or Password !");
         setLoading(false)
       }
     } catch (error) {
       setLoading(false)
-      console.error(error);
     }
   };
 
@@ -85,7 +84,7 @@ const Login: React.FC = () => {
                 </Button>
 
                 <p className="signup-text">
-                  Does not have a account? <a href="#">Sign up for free</a>
+                  Does not have a account? <a href="/signup">Sign up for free</a>
                 </p>
               </Form>
             </div>
