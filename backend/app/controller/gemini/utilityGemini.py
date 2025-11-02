@@ -1,6 +1,7 @@
 import google.generativeai as genai
 from app.mongo import get_db
 from app.variables.variables import GEMINI_API
+from app.controller.utility.scraping import handle_user_query
 db = get_db()
 
 
@@ -10,6 +11,12 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 
 async def geminiResponse(request: str, userId: str, chatId: str, file: dict = None) -> str:
     try:
+        
+        # call the web search model 
+        # web_search = await handle_user_query(request)
+        # print(web_search,"web_search")
+        # return True
+    
         # configure model with system instruction
         model = genai.GenerativeModel(
             "gemini-2.5-flash",

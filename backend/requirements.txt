@@ -9,3 +9,8 @@ dotenv
 python-multipart
 passlib
 pydantic[email]
+
+# for ai web search
+beautifulsoup4
+httpx
+googlesearch-python
