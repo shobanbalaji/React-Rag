@@ -75,7 +75,7 @@ const sendConversion = async ({ userId, message, chatId, type, file}: { userId: 
     try {
        const formData = new FormData();
         formData.append("message", message);
-        formData.append("c_id", chatId);
+        formData.append("c_id", chatId ? chatId: "auto");
         formData.append("c_t", type);
 
         if (file) {

@@ -3,6 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { BsLayoutSidebar } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
+import { USER_NAME } from "../../functions/variables/common";
 
 // Define only the props you need
 interface ChatHeaderProps {
@@ -27,7 +28,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
   return (
     <>
       <Row
-        className="align-items-center justify-content-between ms-3 text-white"
+        className="align-items-center justify-content-between ms-3  me-1 text-white"
         id="chat-header-wrapper"
         style={{ borderBottom: "1px solid rgb(76 74 74)", height: "60px" }}
       >
@@ -47,11 +48,13 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
             <span>
               <IoIosLogOut size={20} style={{cursor:"pointer"}} onClick={handleLogout}/>
             </span>
-            <img
+            {/* <img
               alt="Profile"
               className="rounded-pill border"
               style={{ width: "25px", height: "25px" }}
-            />
+            /> */}
+
+            <div className="bg-warning rounded-pill d-flex justify-content-center align-items-start" style={{height:"2rem", width:"2rem", fontSize:"1.20rem"}}> {USER_NAME?.slice(0,1)}</div>
           </div>
         </Col>
       </Row>

@@ -8,7 +8,7 @@ import { FiEdit } from "react-icons/fi";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { deleteChat, renameChat } from "../../functions/chat";
-import { UID } from "../../functions/variables/common";
+import { UID, USER_NAME } from "../../functions/variables/common";
 import { makeErrorToast } from "../../functions/common/common";
 import Loader from "./Loader";
 const ChatList: React.FC<messageListProps> = ({
@@ -165,7 +165,14 @@ const ChatList: React.FC<messageListProps> = ({
                   />
                 </Form>
               ) : (
-                <p className="my-2 p-2 w-100" onClick={() => handleRetrieveChat(data._id)}> {data.chatName}</p>
+                <p className="my-2 p-2 w-100"  
+                    style={{ 
+                      whiteSpace: 'nowrap', 
+                      overflow: 'hidden', 
+                      textOverflow: 'ellipsis' 
+                    }}  
+                    onClick={() => handleRetrieveChat(data._id)}
+                    > {data.chatName}</p>
               )}
               {(data._id === chatId && openRename)&& (
                 <Dropdown ref={dropdownRef}>
@@ -183,6 +190,19 @@ const ChatList: React.FC<messageListProps> = ({
             </div>
           ))}
         </div>
+
+        <div className="p-3 text-white d-flex user-profile-wrapper gap-2">
+          <div className="user-profile">
+          <div className="bg-warning rounded-pill d-flex justify-content-center align-items-center" style={{height:"35px", width:"35px", fontSize:"1rem"}}>{USER_NAME?.slice(0,1)}</div>
+          </div>
+          <div className="user-info">
+          <p className="mb-0">{USER_NAME}</p>
+          <span style={{fontSize:"0.75rem"}}>Preview</span>
+          </div>
+
+        </div>
+
+
       </Row>
     </>
   );

@@ -28,8 +28,8 @@ const Signup: React.FC = () => {
 
     const res = await createUser(formData);
     if (res.success) {
-      sessionStorage.setItem("userCred", JSON.stringify(res.data[0]));
-      localStorage.setItem("userCred", JSON.stringify(res.data[0]));
+      sessionStorage.setItem("userCred", JSON.stringify(res.data));
+      localStorage.setItem("userCred", JSON.stringify(res.data));
       makeSuccessToast(res?.message);
       nav("/");
     } else {
