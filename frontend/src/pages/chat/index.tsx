@@ -114,13 +114,6 @@ const index = () => {
   }, [conversationData, requestProgress, autoScroll]);
 
 
-
-  const backdropVariants = {
-  visible: { opacity: 1 },
-  hidden: { opacity: 0 },
-};
-
-
 const sidebarVariants = {
   open: { x: 0 },
   closed: { x: '-100%' }, // Slides fully out to the left
