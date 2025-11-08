@@ -4,7 +4,6 @@ import type { messageListProps } from "../../types";
 import { IoIosFlash, IoIosArrowForward } from "react-icons/io";
 
 import { BsLayoutSidebar } from "react-icons/bs";
-import { IoIosThunderstorm } from "react-icons/io";
 import { FiEdit } from "react-icons/fi";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
