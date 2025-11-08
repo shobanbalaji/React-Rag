@@ -64,8 +64,7 @@
 .chat-item:hover {
   background-color: #aaaaaa17;
   cursor: pointer;
-  border-radius: 7px;
-  padding: 12px !important;
+  border-radius: 11px;
 }
 
 .message-bar.message-input::-webkit-scrollbar-thumb {
@@ -215,10 +214,13 @@ pre {
 
 code {
   background: #424242;
-  padding: 5px;
+  padding-inline: 8px;
   border-radius: 5px;
   color: white !important;
   margin-inline: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  font-size: 11px !important;
 }
 
 h3 code {
@@ -361,6 +363,10 @@ pre code {
   padding-left: 0 !important;
   margin-left: 0 !important;
   text-indent: 0 !important;
+}
+
+.response-container ol li {
+  line-height: 1.9;
 }
 
 

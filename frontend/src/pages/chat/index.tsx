@@ -4,6 +4,7 @@ import { useEffect, useState, useRef} from "react";
 import { Row, Col,} from "react-bootstrap";
 import { BsLayoutSidebar } from "react-icons/bs";
 import { MdOutlineStorm } from "react-icons/md";
+import {motion, AnimatePresence} from "framer-motion"
 
 // Components
 import MessageBar from "../components/MessageBar";
@@ -87,11 +88,23 @@ const index = () => {
     getChatData();
   }, []);
 
+
+  // render sidebar list immediately
+  useEffect(() => {
+    const fetchUserChatList = async () => {
+      const { code, success, data } = await getUserChats({ userId: UID });
+      if (code === 500 && !success) {
+        makeErrorToast("Failed to fetch chat history");
+      }
+      setChatList(data);
+    };
+    fetchUserChatList();
+  }, [chatId]);
+
   // useEffect for scroll down the page to the bottom
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [conversationData]);
-
 
 
   useEffect(() => {
@@ -101,6 +114,10 @@ const index = () => {
   }, [conversationData, requestProgress, autoScroll]);
 
 
+const sidebarVariants = {
+  open: { x: 0 },
+  closed: { x: '-100%' }, // Slides fully out to the left
+};
 
 
   return (
@@ -140,7 +157,18 @@ const index = () => {
             </div>
           )}
 
+
           {sidebar && (
+
+          <AnimatePresence>
+            <motion.div
+            className="sidebar-transition h-100"
+            initial="closed" // Start from the 'closed' state
+            animate="open"   // Animate to the 'open' state
+            exit="closed"    // Animate back to 'closed' when unmounted
+            variants={sidebarVariants}
+            transition={{ type: 'spring', stiffness: 200, damping: 50 }} // Nice springy feel
+            >
             <ChatList
               sidebar={sidebar}
               setSidebar={setSidebar}
@@ -150,7 +178,10 @@ const index = () => {
               setChatList={setChatList}
               isLoading={isLoading}
             />
+          </motion.div>
+          </AnimatePresence>
           )}
+
         </Col>
 
         {/* Main Chat Area */}
