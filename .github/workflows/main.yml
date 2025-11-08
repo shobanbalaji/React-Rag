@@ -1,15 +1,17 @@
-name: Deploy to Vercel
+name: Deploy to Vercel (on merge to deployer)
 
 on:
-  push:
+  pull_request:
+    types: [closed]
     branches:
-      - backend-deployer  # your deployment branch name
+      - backend-deployer  # deployment branch
 
 jobs:
   deploy:
+    if: github.event.pull_request.merged == true  # only run when PR is merged
     runs-on: ubuntu-latest
 
     steps:
-      - name: Trigger Vercel Deployment
+      - name: Trigger Vercel Deploy Hook
         run: |
           curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
