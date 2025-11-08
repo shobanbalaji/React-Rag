@@ -146,7 +146,6 @@ const ChatList: React.FC<messageListProps> = ({
             overflowY: "auto",
           }}
         >
-          {isLoading && <Loader />}
           <div className="custom-accordion">
             {/* Accordion Header */}
             <div
@@ -244,6 +243,7 @@ const ChatList: React.FC<messageListProps> = ({
               </div>
             )}
           </div>
+          {isLoading && <Loader />}
         </div>
 
         <div className="p-3 text-white d-flex user-profile-wrapper gap-2">

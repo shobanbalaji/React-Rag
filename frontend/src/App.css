@@ -217,10 +217,10 @@ code {
   padding-inline: 8px;
   border-radius: 5px;
   color: white !important;
-  margin-inline: 5px;
+  /* margin-inline: 5px; */
   padding-top: 3px;
   padding-bottom: 3px;
-  font-size: 11px !important;
+  /* font-size: 11px !important; */
 }
 
 h3 code {
@@ -333,8 +333,11 @@ pre div code {
   font-size: 0.83rem !important;
 }
 
+li pre{
+  margin-top: 1rem;
+}
+
 ol {
-  padding-left: 0px !important;
   line-height: 35px;
 }
 
