@@ -55,7 +55,7 @@
 }
 
 .rag-container {
-  height: 100vh !important;
+  height: 100dvh !important;
   width: 100vw;
   padding: 0rem 0.8rem 0rem 0rem;
 }
@@ -387,7 +387,7 @@ pre code {
 
 
 /* .login-screen {
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: #000;
   display: flex;
   align-items: center;
@@ -395,7 +395,7 @@ pre code {
 }
 
 .login-wrapper {
-  height: 100vh;
+  height: 100dvh;
 }
 
 
@@ -545,7 +545,7 @@ pre code {
     display: none;
   }
   .chat-content{
-    height: 50vh !important;
+    height: 50dvh !important;
   }
   .response-container .text-block ul{
     padding-left: 0px;
@@ -556,7 +556,7 @@ pre code {
   }
 
   .chat-viewer{
-    height: 85vh;
+    height: 85dvh;
   }
 
   .chat-viewer .chat-content{
@@ -566,10 +566,10 @@ pre code {
 
 
   .content-max{
-    height: 83vh !important;
+    height: 83dvh !important;
   }
   .content-min{
-    height: 83vh !important;
+    height: 83dvh !important;
   }
 
   .chat-viewer .chat-content .intro-text{
@@ -612,7 +612,7 @@ pre code {
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100dvh;
   width: 250px; /* adjust as needed */
   background-color: #1e1e1e;
   transform: translateX(-100%);
