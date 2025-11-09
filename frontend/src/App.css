@@ -80,7 +80,7 @@
 
 .chat-item {
   margin-top: 10px;
-  padding: 12px !important;
+  padding: 8px !important;
   /* font-family: monospace; */
 }
 
@@ -355,6 +355,18 @@ pre div::-webkit-scrollbar-thumb:hover {
   background: #777;
 }
 
+.chat-list-container::-webkit-scrollbar{
+  width: 5px;
+  height: 5px;
+}
+
+
+.chat-list-container::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 4px;
+}
+
+
 pre code {
   display: block;
   padding-left: 0 !important;
@@ -488,6 +500,25 @@ h6 {
   line-height: 1.4 !important;
 }
 
+.storm-drop-down .dropdown-menu {
+  background: #242424;
+  min-width:7.5rem !important;
+  border-radius: 18px;
+  padding: 10px;
+}
+
+.storm-drop-down .dropdown-menu .dropdown-item{
+  color: white;
+  background: #2424246d;
+  padding-inline-start: 10px;
+
+}
+
+.storm-drop-down .dropdown-menu .dropdown-item:hover{
+  border-radius: 10px;
+  background-color: #5555554c;
+}
+
 @media (max-width: 712px) {
 
   .chat-sidebar {
@@ -612,6 +643,10 @@ h6 {
 
   .blink-progress{
     margin-inline-start: 20px;
+  }
+
+  .chat-list-container{
+    height: 74vh !important;
   }
 
   /* mobile page styling */

@@ -71,12 +71,13 @@ const deleteChat = async ({ userId, c_id }: { userId: string; c_id: string }) =>
 };
 
 // Send Conversion
-const sendConversion = async ({ userId, message, chatId, type, file}: { userId: string; message: string, chatId: string, type: string, file:any}) => {
+const sendConversion = async ({ userId, message, chatId, type, file, mode}: { userId: string; message: string, chatId: string, type: string, file:any, mode: string}) => {
     try {
        const formData = new FormData();
         formData.append("message", message);
         formData.append("c_id", chatId ? chatId: "auto");
         formData.append("c_t", type);
+        formData.append("mode", mode);
 
         if (file) {
           formData.append("file", file); // always "file"

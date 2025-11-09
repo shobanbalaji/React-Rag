@@ -8,12 +8,12 @@ db = get_db()
 
 
 # create conversation
-async def createChatRequest(userId, message, chatId, file):
+async def createChatRequest(userId, message, chatId, file, mode):
     try:
         # if chat id exist does not create a chat
         if chatId == "auto":
             # structure and validate the payload
-            payload = {"UId": userId, "chatName": "New Chat"}
+            payload = {"UId": userId, "chatName": "New Chat", "isRag": mode}
             validate_chat_payload = chatModel(**payload).dict()
             create_chat = db["chat"].insert_one(validate_chat_payload)
             response_data = {"_id": create_chat.inserted_id, **validate_chat_payload}
@@ -50,7 +50,7 @@ async def createChatRequest(userId, message, chatId, file):
                 "chatId": chatId if chatId and chatId != "auto" else cleaned_chat_response["_id"],
                 "message": message,
                 "response": request_gemini,
-                "isRag": False,
+                "isRag": mode,
             }
             validate_conversation_payload = conversationModel(**payload).dict()
             create_message = db["conversation"].insert_one(

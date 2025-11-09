@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Dropdown, Form } from "react-bootstrap";
+import { Button, Card, Dropdown, Form } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { LuAudioLines } from "react-icons/lu";
 import { FaCircleArrowUp } from "react-icons/fa6";
@@ -17,6 +17,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
   setChatId,
   setConversationData,
   setRequestProgress,
+  chatMode
 }) => {
   const textareaRef = useRef<HTMLInputElement>(null);
   const [sendMessage, setSendMessage] = useState<boolean>(false);
@@ -67,6 +68,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
         chatId: chatId,
         type: file ? "doc" : "nor",
         file: file,
+        mode: chatMode=="rag"? "true": "false"
       });
 
       if (code == 200 && success) {
@@ -106,13 +108,13 @@ const MessageBar: React.FC<MessageBarProps> = ({
     } catch (error) {}
   };
 
-  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     setFileContent(file);
-  //     // your upload logic here
-  //   }
-  // };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileContent(file);
+      // your upload logic here
+    }
+  };
 
   // this useEffect handle the message bar height and scroll
   useEffect(() => {
@@ -126,12 +128,14 @@ const MessageBar: React.FC<MessageBarProps> = ({
   }, [message]);
 
   return (
+    <>
     <div className="message-bar">
       <Form
         onSubmit={(e) => handleClick(e)}
         className="d-flex align-items-center ps-2 pe-3"
       >
-        <Dropdown>
+        <Form.Control ref={fileInputRef}  type="file" onChange={handleFileChange} style={{display:"none"}}/>
+        <Dropdown className="storm-drop-down">
           <Dropdown.Toggle
             className="p-0"
             style={{ background: "unset", border: "none" }}
@@ -214,6 +218,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
         </div>
       </Form>
     </div>
+    </>
   );
 };
 

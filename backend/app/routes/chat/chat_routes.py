@@ -28,7 +28,7 @@ async def renameChats(userId: str = Header(..., convert_underscores=False), payl
 
 
 @router.post("/chatRequest")
-async def chatRequest(userId: str = Header(..., convert_underscores=False),message: Optional[str] = Form(None),c_id: Optional[str] = Form(None),file: Optional[UploadFile] = File(None)):
+async def chatRequest(userId: str = Header(..., convert_underscores=False),message: Optional[str] = Form(None),c_id: Optional[str] = Form(None),file: Optional[UploadFile] = File(None), mode:Optional[str] = Form(None)):
     
     file_info = None
     
@@ -46,7 +46,7 @@ async def chatRequest(userId: str = Header(..., convert_underscores=False),messa
 
         # Reset cursor if you need to re-read later
         await file.seek(0)
-    return await createChatRequest(userId, message, c_id, file=file_info)
+    return await createChatRequest(userId, message, c_id, file=file_info, mode=True if mode == "true" else False)
 
 @router.get("/getChat")
 async def chatRequest(userId: str = Header(..., convert_underscores=False)):  

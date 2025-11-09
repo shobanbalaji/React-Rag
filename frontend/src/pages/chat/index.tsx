@@ -24,6 +24,7 @@ const index = () => {
   const [message, setMessage] = useState<string>("");
   const [sidebar, setSidebar] = useState<boolean>(true);
   const [chatId, setChatId] = useState<string>("");
+  const [chatMode, setChatMode] = useState<string>("auto");
   const [chatList, setChatList] = useState<chatListProps[]>([]);
   const [sidebarPointer, setSidebarPointer] = useState<boolean>(false);
   const [conversationData, setConversationData] = useState<conversationDataProps[]>([]);
@@ -45,8 +46,10 @@ const index = () => {
 
     const params = new URLSearchParams(window.location.search);
     const paramValue = params.get("id");
+    const chatMode = params.get("mode");
     if (paramValue) {
       setChatId(paramValue);
+      setChatMode(chatMode ?? "auto")
     }
   }, []);
 
@@ -226,6 +229,8 @@ const sidebarVariants = {
               chatId={chatId}
               setConversationData={setConversationData}
               setRequestProgress={setRequestProgress}
+              setChatMode={setChatMode}
+              chatMode={chatMode}
             />
           </div>
 
