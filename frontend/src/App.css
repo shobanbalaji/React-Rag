@@ -607,7 +607,7 @@ h6 {
   }
 
   .site-font {
-    min-width: 344px;
+    width: 344px;
   }
 
   .blink-progress{

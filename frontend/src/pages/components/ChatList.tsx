@@ -168,7 +168,7 @@ const ChatList: React.FC<messageListProps> = ({
 
             {/* Accordion Body */}
             {isOpen && (
-              <div>
+              <div style={{height:"30vh"}}>
                 {chatList?.map((data, index) => (
                   <div
                     key={index}
