@@ -3,7 +3,7 @@ import { useEffect, useState, useRef} from "react";
 // UI Components
 import { Row, Col,} from "react-bootstrap";
 import { BsLayoutSidebar } from "react-icons/bs";
-import { MdOutlineStorm } from "react-icons/md";
+import { IoIosFlash } from "react-icons/io";
 import {motion, AnimatePresence} from "framer-motion"
 
 // Components
@@ -152,7 +152,7 @@ const sidebarVariants = {
               {sidebarPointer ? (
               <BsLayoutSidebar size={16} color="white" />
               ) : (
-                <MdOutlineStorm size={22} color="white" />
+                <IoIosFlash size={22} color="#ffc51c" />
               )}
             </div>
           )}

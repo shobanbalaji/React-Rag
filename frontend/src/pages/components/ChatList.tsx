@@ -1,9 +1,9 @@
 import React, { useState, useRef, type ChangeEvent } from "react";
 import { Row, Form, Dropdown} from "react-bootstrap";
 import type { messageListProps } from "../../types";
+import { IoIosFlash, IoIosArrowForward } from "react-icons/io";
 
 import { BsLayoutSidebar } from "react-icons/bs";
-import { IoIosThunderstorm } from "react-icons/io";
 import { FiEdit } from "react-icons/fi";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +24,8 @@ const ChatList: React.FC<messageListProps> = ({
   const dropdownRef = useRef(null);
   const [openRename, setOpenRename] = useState<boolean>(true);
   const [renameValue, setRenameValue] = useState<string>("")
+  const [isOpen, setIsOpen] = useState(true); // Controls accordion open/close
+  const toggleAccordion = () => setIsOpen((prev) => !prev);
 
   // set the chat id to the state and set the chat id value to the query params 
   const handleRetrieveChat = async (docId: string) => {
@@ -98,7 +100,7 @@ const ChatList: React.FC<messageListProps> = ({
           height: "100% ",
           background: "#171717",
           flexDirection: "column",
-          fontSize:"14px",
+          fontSize: "14px",
         }}
       >
         {/* Header */}
@@ -106,8 +108,15 @@ const ChatList: React.FC<messageListProps> = ({
           style={{ minHeight: "40px" }}
           className="d-flex justify-content-between align-items-center mt-3"
         >
-          <div className="p-2" style={{cursor:"pointer"}} onClick={() => handleRetrieveChat("auto")}>
-            <IoIosThunderstorm  size={25} color="white"/>
+          <div
+            className="p-2 d-flex justify-content-center align-items-center"
+            style={{ cursor: "pointer" }}
+            onClick={() => handleRetrieveChat("auto")}
+          >
+          <IoIosFlash size={24} color="#ffc51c" />
+          <p className="text-white fw-bold mb-0">
+            Storm AI
+          </p>
           </div>
 
           <div
@@ -136,73 +145,121 @@ const ChatList: React.FC<messageListProps> = ({
             flex: 1,
             overflowY: "auto",
           }}
-        > 
-          {isLoading && <Loader/>}
-          {chatList?.map((data, index) => (
+        >
+          <div className="custom-accordion">
+            {/* Accordion Header */}
             <div
-              key={index}
-              style={{ height: "35px" }}
-              className={`d-flex justify-content-between align-items-center text-white ${openRename ? "pe-2" : "pe-0"} my-1 chat-item chat-item-${
-                data._id === chatId ? "active" : "inActive"
-              }`}
-              
+              onClick={toggleAccordion}
+              className="accordion-header d-flex justify-content-start gap-2 align-items-center ps-3  py-2 text-white"
+              style={{cursor:"pointer"}}
             >
-              {data._id === chatId ? (
-                <Form onSubmit={(e)=>handleRenameChat(e, data._id,data.chatName)} style={{width:"100%"}}>
-                  <Form.Control
-                    type="text"
-                    defaultValue={data.chatName}
-                    readOnly={openRename}
-                    className="ps-2"
-                    onChange={handleChange}
-                    style={{
-                      background: "transparent",
-                      border: openRename ? "none" : "1px solid white",
-                      color: "white",
-                      fontSize:"14px"
-                    }}
-                    onClick={(e)=>handleRenameChat(e, data._id,data.chatName)}
-                  />
-                </Form>
-              ) : (
-                <p className="my-2 p-2 w-100"  
-                    style={{ 
-                      whiteSpace: 'nowrap', 
-                      overflow: 'hidden', 
-                      textOverflow: 'ellipsis' 
-                    }}  
-                    onClick={() => handleRetrieveChat(data._id)}
-                    > {data.chatName}</p>
-              )}
-              {(data._id === chatId && openRename)&& (
-                <Dropdown ref={dropdownRef}>
-                  <Dropdown.Toggle className="p-0" style={{background:"unset", border:"none"}}>
-                    <BiDotsHorizontalRounded />
-                  </Dropdown.Toggle>
-
-                  <Dropdown.Menu>
-                    <Dropdown.Item onClick={()=>setOpenRename(false)}>Rename</Dropdown.Item>
-                    <Dropdown.Item onClick={()=>handleDeleteChat(chatId)}>Delete</Dropdown.Item>
-                  </Dropdown.Menu>
-
-                </Dropdown>
-              )}
+              <span className="text-secondary" style={{ fontSize: "14px" }}>
+                Chat
+              </span>
+              <span
+                style={{
+                  transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
+                  transition: "transform 0.2s",
+                }}
+              >
+               <IoIosArrowForward />
+              </span>
             </div>
-          ))}
+
+            {/* Accordion Body */}
+            {isOpen && (
+              <div style={{height:"30vh"}}>
+                {chatList?.map((data, index) => (
+                  <div
+                    key={index}
+                    style={{ height: "35px" }}
+                    className={`d-flex justify-content-between align-items-center text-white ${
+                      openRename ? "pe-2" : "pe-0"
+                    } my-1 chat-item chat-item-${
+                      data._id === chatId ? "active" : "inActive"
+                    }`}
+                  >
+                    {data._id === chatId ? (
+                      <Form
+                        onSubmit={(e) =>
+                          handleRenameChat(e, data._id, data.chatName)
+                        }
+                        style={{ width: "100%" }}
+                      >
+                        <Form.Control
+                          type="text"
+                          defaultValue={data.chatName}
+                          readOnly={openRename}
+                          className="ps-2"
+                          onChange={handleChange}
+                          style={{
+                            background: "transparent",
+                            border: openRename ? "none" : "1px solid white",
+                            color: "white",
+                            fontSize: "14px",
+                          }}
+                          onClick={(e) =>
+                            handleRenameChat(e, data._id, data.chatName)
+                          }
+                        />
+                      </Form>
+                    ) : (
+                      <p
+                        className="my-2 p-2 w-100"
+                        style={{
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                        onClick={() => handleRetrieveChat(data._id)}
+                      >
+                        {" "}
+                        {data.chatName}
+                      </p>
+                    )}
+                    {data._id === chatId && openRename && (
+                      <Dropdown ref={dropdownRef}>
+                        <Dropdown.Toggle
+                          className="p-0"
+                          style={{ background: "unset", border: "none" }}
+                        >
+                          <BiDotsHorizontalRounded />
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                          <Dropdown.Item onClick={() => setOpenRename(false)}>
+                            Rename
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => handleDeleteChat(chatId)}
+                          >
+                            Delete
+                          </Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+          {isLoading && <Loader />}
         </div>
 
         <div className="p-3 text-white d-flex user-profile-wrapper gap-2">
           <div className="user-profile">
-          <div className="bg-warning rounded-pill d-flex justify-content-center align-items-center" style={{height:"35px", width:"35px", fontSize:"1rem"}}>{USER_NAME?.slice(0,1)}</div>
+            <div
+              className="bg-warning rounded-pill d-flex justify-content-center align-items-center"
+              style={{ height: "35px", width: "35px", fontSize: "1rem" }}
+            >
+              {USER_NAME?.slice(0, 1)}
+            </div>
           </div>
           <div className="user-info">
-          <p className="mb-0">{USER_NAME}</p>
-          <span style={{fontSize:"0.75rem"}}>Preview</span>
+            <p className="mb-0">{USER_NAME}</p>
+            <span style={{ fontSize: "0.75rem" }}>Preview</span>
           </div>
-
         </div>
-
-
       </Row>
     </>
   );
