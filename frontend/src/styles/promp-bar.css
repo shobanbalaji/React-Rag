@@ -1,0 +1,100 @@
+
+
+
+/* message */
+.prompt-wrapper {
+  margin: 0 auto;
+  width: 80%;
+
+}
+
+.prompt-form {
+  width: 100%;
+}
+
+.prompt-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  border-radius: 28px;
+  /* border: 1px solid #ddd; */
+  background: #424242;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.prompt-textarea-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.prompt-textarea {
+  width: 100%;
+  min-height: 56px;
+  font-size: 16px;
+  border: none;
+  background: transparent;
+  resize: none;
+  padding: 6px;
+  outline: none;
+}
+
+.prompt-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.left-actions,
+.right-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* General Button Style */
+.action-btn {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  border: 1px solid #ccc;
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.action-btn:hover {
+  background: #f2f2f2;
+}
+
+.action-btn span {
+  margin-left: 6px;
+}
+
+/* Voice Button */
+.voice-btn {
+  display: flex;
+  align-items: center;
+  height: 36px;
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  background: #f4f4f4;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.voice-btn:hover {
+  opacity: 0.8;
+}
+
+.voice-btn span {
+  margin-left: 6px;
+}

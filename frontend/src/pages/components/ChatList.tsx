@@ -8,9 +8,10 @@ import { FiEdit } from "react-icons/fi";
 import { BiDotsHorizontalRounded } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { deleteChat, renameChat } from "../../functions/chat";
-import { UID, USER_NAME } from "../../functions/variables/common";
 import { makeErrorToast } from "../../functions/common/common";
 import Loader from "./Loader";
+import { getUserName } from "../../functions/variables/common";
+
 const ChatList: React.FC<messageListProps> = ({
   sidebar,
   setSidebar,
@@ -28,6 +29,8 @@ const ChatList: React.FC<messageListProps> = ({
   const [isRagOpen, setIsRagOpen] = useState(false); // Controls accordion open/close
   const toggleAccordion = () => setIsOpen((prev) => !prev);
   const ragToggleAccordion = () => setIsRagOpen((prev) => !prev);
+  const USER_NAME = getUserName()
+  
 
   // set the chat id to the state and set the chat id value to the query params
   const handleRetrieveChat = async (docId: string, mode?: string) => {
@@ -61,7 +64,6 @@ const ChatList: React.FC<messageListProps> = ({
         return true;
       }
       const response = await renameChat({
-        userId: UID,
         c_id: chatId,
         c_n: renameValue,
       });
@@ -86,9 +88,9 @@ const ChatList: React.FC<messageListProps> = ({
   // function for delete the chat
   const handleDeleteChat = async (chatId: string) => {
     try {
-      const response = await deleteChat({ userId: UID, c_id: chatId });
+      const response = await deleteChat({c_id: chatId });
       if (response.code == 200 && response.success) {
-        const updatedChatList = chatList.filter(
+        const updatedChatList = chatList?.filter(
           (data) => data._id != response.data.value
         );
         setChatList(updatedChatList);
@@ -114,6 +116,7 @@ const ChatList: React.FC<messageListProps> = ({
         <div
           style={{ minHeight: "40px"}}
           className="d-flex justify-content-between align-items-center mt-3"
+          // id="chat-list-header"
         >
           <div
             className="p-2 d-flex justify-content-center align-items-center"
@@ -158,9 +161,7 @@ const ChatList: React.FC<messageListProps> = ({
           {/* Rag chat */}
           <div
             className="chat-list-bar"
-            style={{
-              overflowY: "auto",
-            }}
+           
           >
             <div className="custom-accordion">
               {/* Accordion Header */}
@@ -186,7 +187,7 @@ const ChatList: React.FC<messageListProps> = ({
               {isRagOpen && (
                 <div>
                   {chatList
-                    .filter((list) => list?.isRag == true)
+                    ?.filter((list) => list?.isRag == true)
                     ?.map((data, index) => (
                       <div
                         key={index}
@@ -236,7 +237,7 @@ const ChatList: React.FC<messageListProps> = ({
                           </p>
                         )}
                         {data._id === chatId && openRename && (
-                          <Dropdown ref={dropdownRef}>
+                          <Dropdown ref={dropdownRef} className="storm-drop-down">
                             <Dropdown.Toggle
                               className="p-0"
                               style={{ background: "unset", border: "none" }}
@@ -270,7 +271,6 @@ const ChatList: React.FC<messageListProps> = ({
             className="chat-list-bar"
             style={{
               flex: 1,
-              overflowY: "auto",
             }}
           >
             <div className="custom-accordion">
@@ -297,7 +297,7 @@ const ChatList: React.FC<messageListProps> = ({
               {isOpen && (
                 <div>
                   {chatList
-                    .filter((list) => list?.isRag != true)
+                    ?.filter((list) => list?.isRag != true)
                     ?.map((data, index) => (
                       <div
                         key={index}

@@ -11,6 +11,8 @@
   width: 65%;
   border-radius: 25px;
   background: #303030;
+  position: absolute;
+  bottom: 10px;
 }
 
 .message-bar .message-input {
@@ -23,7 +25,7 @@
   font-weight: 400 !important;
   font-style: normal !important;
   font-optical-sizing: auto !important;
-  border-radius: 25px;
+  /* border-radius: 25px; */
 }
 
 .message-input::-webkit-scrollbar {
@@ -396,61 +398,10 @@ pre code {
 }
 
 
-.login-left {
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-  padding: 40px;
-  color: #080808;
-}
-
-.login-right {
-  background: url("../src/assets/login-img.jpg") no-repeat center center;
-  background-size: cover;
-}
-
-
-.login-form .form-control,
-.login-right .form-control,
-.login-form select,
-.login-right select {
-  border-radius: 0px;
-  border: none !important;
-  border-bottom: 1px solid #aaa !important;
-  background-color: transparent !important;
-  color: white !important;
-}
-
-.login-form .form-control:focus,
-.login-right .form-control:focus,
-.login-form select,
-.login-right select {
-  box-shadow: none !important;
-}
-
-.login-form select option,
-.login-right select option {
-  background-color: rgba(32, 30, 30, 0.673) !important;
-  color: rgb(255, 255, 255);
-}
-
-/* login css */
-
-.signup-text {
-  text-align: center;
-  margin-top: 15px;
-  font-size: 0.9rem;
-}
-
-.signup-text a {
-  color: #fbbc05;
-  font-weight: 600;
-  text-decoration: none;
-}
-
-.signup-text a:hover {
-  text-decoration: underline;
-}
+/* .message-empty{
+  position: relative;
+  bottom: 50px;
+} */
 
 
 .site-font {
@@ -564,16 +515,28 @@ h6 {
     margin: 0px !important;
     display: block !important;
     margin-inline: 30px 20px !important;
+    position: relative !important;
+    top: 100px;
   }
 
   .message-bar {
     width: 100%;
+    z-index: 0;
+    bottom: 30px;
+  }
+
+  .message-bar form{
+    z-index: 0;
+    position: relative;
+  }
+
+  #chat-list-header {
+    margin-top: 10px !important;
   }
 
   #chat-header-wrapper {
     display: flex !important;
     margin-right: 5px;
-    position: sticky;
   }
 
   #chat-header-wrapper .col-md-10 {
@@ -639,6 +602,9 @@ h6 {
 
   .site-font {
     width: 344px;
+    z-index: 20;
+    position: absolute;
+    justify-content: space-between;
   }
 
   .blink-progress{
