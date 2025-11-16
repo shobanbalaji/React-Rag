@@ -8,6 +8,7 @@ export type messageList = {
 export type chatListProps = {
     _id: string;
     chatName: string;
+    isRag: boolean
 }
 
 export type messageListProps = {

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, Dropdown, Form } from "react-bootstrap";
+import { Button, Card, Dropdown, Form } from "react-bootstrap";
 import { FiPlus } from "react-icons/fi";
 import { LuAudioLines } from "react-icons/lu";
 import { FaCircleArrowUp } from "react-icons/fa6";
@@ -8,7 +8,7 @@ import { FaSquare } from "react-icons/fa";
 import type { MessageBarProps } from "../../types";
 import { sendConversion } from "../../functions/chat";
 import { makeErrorToast } from "../../functions/common/common";
-import { UI_ERROR_MESSAGE, UID } from "../../functions/variables/common";
+import { UI_ERROR_MESSAGE } from "../../functions/variables/common";
 
 const MessageBar: React.FC<MessageBarProps> = ({
   setMessage,
@@ -17,12 +17,13 @@ const MessageBar: React.FC<MessageBarProps> = ({
   setChatId,
   setConversationData,
   setRequestProgress,
+  chatMode
 }) => {
-  const textareaRef = useRef<HTMLInputElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [sendMessage, setSendMessage] = useState<boolean>(false);
   const [fileContent, setFileContent] = useState<any>();
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [localMessage, setLocalMessage] = useState<string>("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const nav = useNavigate();
 
   // this function handles the onchange value of the message bar value and set the value into state
@@ -38,6 +39,7 @@ const MessageBar: React.FC<MessageBarProps> = ({
       if (localMessage.trim().length == 0) {
         return true;
       }
+      resetHeight()
       const file = fileContent;
       const messageRequest = localMessage.trim();
       setFileContent(null);
@@ -63,10 +65,10 @@ const MessageBar: React.FC<MessageBarProps> = ({
 
       const { code, success, data } = await sendConversion({
         message: request.trim(),
-        userId: UID,
         chatId: chatId,
         type: file ? "doc" : "nor",
         file: file,
+        mode: chatMode=="rag"? "true": "false"
       });
 
       if (code == 200 && success) {
@@ -106,13 +108,13 @@ const MessageBar: React.FC<MessageBarProps> = ({
     } catch (error) {}
   };
 
-  // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const file = event.target.files?.[0];
-  //   if (file) {
-  //     setFileContent(file);
-  //     // your upload logic here
-  //   }
-  // };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setFileContent(file);
+      // your upload logic here
+    }
+  };
 
   // this useEffect handle the message bar height and scroll
   useEffect(() => {
@@ -120,18 +122,35 @@ const MessageBar: React.FC<MessageBarProps> = ({
     if (textarea) {
       textarea.style.height = "auto"; // Reset height
       textarea.style.height = `${textarea.scrollHeight}px`; // Set new height
-      textarea.style.maxHeight = `120px`; // Set new height
+      textarea.style.maxHeight = `200px`; // Set new height
       textarea.style.overflowY = `scroll`; // Set new height
     }
   }, [message]);
 
+  const adjustHeight = () => {
+    const el = textareaRef.current;
+    if (!el) return;
+
+    el.style.height = "auto";       // reset first
+    el.style.height = el.scrollHeight + "px"; // apply natural height
+  };
+
+  const resetHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+  };
+
+
   return (
+    <>
     <div className="message-bar">
       <Form
         onSubmit={(e) => handleClick(e)}
-        className="d-flex align-items-center ps-2 pe-3"
+        className="d-flex align-items-end ps-2 pe-3"
       >
-        <Dropdown>
+        <Form.Control ref={fileInputRef}  type="file" onChange={handleFileChange} style={{display:"none"}}/>
+        <Dropdown className="storm-drop-down">
           <Dropdown.Toggle
             className="p-0"
             style={{ background: "unset", border: "none" }}
@@ -141,57 +160,77 @@ const MessageBar: React.FC<MessageBarProps> = ({
 
           <Dropdown.Menu>
             <Dropdown.Item onClick={handleOpenFile}> Upload File</Dropdown.Item>
-            {/* <Dropdown.Item onClick={handleOpenImage}> Upload Image</Dropdown.Item> */}
           </Dropdown.Menu>
         </Dropdown>
         <Form.Control
-          type="text"
-          // as={"textarea"}
-          className="message-input py-3 pe-4 ps-0"
-          placeholder="Ask anything"
-          onChange={handleChange}
-          value={localMessage}
+          as="textarea"
           ref={textareaRef}
+          value={localMessage}
+          placeholder="Ask anything..."
+          className="message-input py-3 pe-4 ps-0 me-2"
+          onChange={(e) => {
+            handleChange(e);
+            adjustHeight();
+          }}
+          rows={1}
           style={{
             resize: "none",
-            overflowX: "hidden",
+            overflow: "hidden",
+            minHeight: "48px",
             maxHeight: "280px",
+            transition: "height 0.15s ease", 
+            lineHeight: "24px",
           }}
-          onKeyDown={(e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+          onKeyDown={(e) => {
+            // Enter = Submit
             if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault(); // Prevents new line
-              handleClick(e); // Call your submit function
+              e.preventDefault();
+              handleClick(e);
+              return;
+            }
+
+            // Shift + Enter = New Line + dynamic height
+            if (e.key === "Enter" && e.shiftKey) {
+              setTimeout(() => adjustHeight(), 0);
             }
           }}
         />
 
-        <div className="d-flex gap-3 justify-content-end align-items-center">
+      <div className="d-flex gap-3 justify-content-end align-items-center mb-2">
+
+        {/* Audio Icon (only when no message) */}
+        {!localMessage.trim() && (
           <LuAudioLines
             size={15}
             color="white"
             className="more-tool-icon"
             style={{ cursor: "pointer" }}
           />
-          {!sendMessage ? (
-            <Button
+        )}
+
+        {/* If there is a message → show submit button */}
+        {localMessage ? (
+          <Button
+            type="submit"
+            className="p-0"
+            style={{ background: "none", border: "none" }}
+          >
+            <FaCircleArrowUp
+              size={25}
+              color="white"
               type="submit"
-              className="p-0"
-              style={{ background: "none", border: "none" }}
-            >
-              <FaCircleArrowUp
-                size={25}
-                color="white"
-                type="submit"
-                className={` ${
-                  localMessage.trim().length > 0
-                    ? "enable-submit"
-                    : "disable-submit"
-                }`}
-                onClick={(e) => handleClick(e)}
-                style={{ cursor: "pointer" }}
-              />
-            </Button>
-          ) : (
+              className={`${
+                localMessage.trim().length > 0
+                  ? "enable-submit"
+                  : "disable-submit"
+              }`}
+              onClick={(e) => handleClick(e)}
+              style={{ cursor: "pointer" }}
+            />
+          </Button>
+        ) : (
+          /* If no message → show stop square (only when sendMessage === true) */
+          sendMessage && (
             <div
               className="p-1 d-flex justify-content-center align-items-center"
               style={{
@@ -207,13 +246,14 @@ const MessageBar: React.FC<MessageBarProps> = ({
                 fill="white"
                 stroke="white"
                 onClick={() => setSendMessage(false)}
-                className="more-tool-icon"
               />
             </div>
-          )}
-        </div>
+          )
+        )}
+      </div>
       </Form>
     </div>
+    </>
   );
 };
 

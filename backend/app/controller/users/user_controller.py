@@ -14,7 +14,7 @@ def get_current_user():
     return {"users": users}
 
 
-def create_user(payload):
+async def create_user(payload):
     collectionName = "users"
     payloadValue = payload.dict()
     
@@ -24,7 +24,8 @@ def create_user(payload):
         return {"success":False, "message":"This user mail already exist", "data":None}
     
     # create user
-    createUser = add_document(collectionName=collectionName, document=payloadValue, model=createUserModel)
+    createUser = await add_document(collectionName=collectionName, document=payloadValue, model=createUserModel)
+    print(createUser,"createUser")
     # Check if creation succeeded
     if createUser:
         return {

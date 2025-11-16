@@ -16,7 +16,7 @@ import { fetchConversation, getUserChats } from "../../functions/chat";
 import { makeErrorToast } from "../../functions/common/common";
 
 // Constants & Types
-import { UI_ERROR_MESSAGE, UID } from "../../functions/variables/common";
+import { UI_ERROR_MESSAGE } from "../../functions/variables/common";
 import type { chatListProps, conversationDataProps } from "../../types";
 import ChatViewer from "../components/ChatViewer";
 
@@ -24,6 +24,7 @@ const index = () => {
   const [message, setMessage] = useState<string>("");
   const [sidebar, setSidebar] = useState<boolean>(true);
   const [chatId, setChatId] = useState<string>("");
+  const [chatMode, setChatMode] = useState<string>("auto");
   const [chatList, setChatList] = useState<chatListProps[]>([]);
   const [sidebarPointer, setSidebarPointer] = useState<boolean>(false);
   const [conversationData, setConversationData] = useState<conversationDataProps[]>([]);
@@ -45,8 +46,10 @@ const index = () => {
 
     const params = new URLSearchParams(window.location.search);
     const paramValue = params.get("id");
+    const chatMode = params.get("mode");
     if (paramValue) {
       setChatId(paramValue);
+      setChatMode(chatMode ?? "auto")
     }
   }, []);
 
@@ -57,7 +60,7 @@ const index = () => {
     const fetchConversationData = async () => {
       try {
         setAutoScroll(!autoScroll)
-        const response = await fetchConversation({ chatId, userId: UID });
+        const response = await fetchConversation({ chatId });
         setConversationData(response.data);
         setAutoScroll(!autoScroll)
       } catch (error) {
@@ -73,7 +76,7 @@ const index = () => {
     const getChatData = async () => {
       try {
         setIsLoading(true);
-        const { code, success, data } = await getUserChats({ userId: UID });
+        const { code, success, data } = await getUserChats();
         if (code === 500 && !success) {
           makeErrorToast("Failed to fetch chat history");
           setIsLoading(false);
@@ -92,7 +95,7 @@ const index = () => {
   // render sidebar list immediately
   useEffect(() => {
     const fetchUserChatList = async () => {
-      const { code, success, data } = await getUserChats({ userId: UID });
+      const { code, success, data } = await getUserChats();
       if (code === 500 && !success) {
         makeErrorToast("Failed to fetch chat history");
       }
@@ -218,7 +221,7 @@ const sidebarVariants = {
           </div>
 
           {/* Message Bar Fixed at Bottom */}
-          <div className="px-5 ms-5 py-2 d-flex justify-content-center" id="message-bar-wrapper">
+          <div className="px-5 ms-5 py-2 d-flex justify-content-center" style={{position:"relative", top:"60px"}} id="message-bar-wrapper">
             <MessageBar
               setMessage={setMessage}
               message={message}
@@ -226,6 +229,8 @@ const sidebarVariants = {
               chatId={chatId}
               setConversationData={setConversationData}
               setRequestProgress={setRequestProgress}
+              setChatMode={setChatMode}
+              chatMode={chatMode}
             />
           </div>
 

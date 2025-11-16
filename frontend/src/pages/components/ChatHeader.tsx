@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { BsLayoutSidebar } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { USER_NAME } from "../../functions/variables/common";
+import { getUserName } from "../../functions/variables/common";
 
 // Define only the props you need
 interface ChatHeaderProps {
@@ -14,12 +14,12 @@ interface ChatHeaderProps {
 const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
 
   const nav = useNavigate();
+  const USER_NAME = getUserName()
 
-  
     const handleLogout = () =>{
     try {
-      sessionStorage.setItem("userCred", "");
-      localStorage.setItem("userCred", "");
+      sessionStorage.removeItem("userCred");
+      localStorage.removeItem("userCred");
       nav("/")
     } catch (error) {
     }

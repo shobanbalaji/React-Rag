@@ -1,11 +1,14 @@
 import axios from "axios";
 import { API_ENDPOINT, INTERNAL_SERVER_ERROR } from "../variables/common";
-import { UID } from "../variables/common";
+import { getUID } from "../variables/common";
+
+
 // Get User Chats
-const getUserChats = async ({ userId }: { userId: string }) => {
+const getUserChats = async () => {
     try {
+        const UID = getUID();
         const response = await axios.get(`${API_ENDPOINT}chat/getChat`, {
-            headers: { userId:userId || UID  }
+            headers: { userId: UID  }
         });
         return response.data;
     } catch (error) {
@@ -18,13 +21,14 @@ const getUserChats = async ({ userId }: { userId: string }) => {
 };
 
 // Create Chat
-const createChat = async ({ userId }: { userId: string, message?: string, c_id?: string }) => {
+const createChat = async () => {
     try {
+        const UID = getUID();
         const response = await axios.post(`${API_ENDPOINT}chat/createChat`, {
             // message,
             // c_id
         }, {
-            headers: { userId:userId || UID  }
+            headers: { userId: UID  }
         });
         return response.data;
     } catch (error) {
@@ -37,12 +41,13 @@ const createChat = async ({ userId }: { userId: string, message?: string, c_id?:
 };
 
 // Rename Chat
-const renameChat = async ({ userId, c_id, c_n }: { userId: string, c_id: string, c_n: string }) => {
+const renameChat = async ({ c_id, c_n }: {c_id: string, c_n: string }) => {
     try {
+        const UID = getUID();
         const response = await axios.patch(`${API_ENDPOINT}chat/renameChat`, {
             c_id, c_n
         }, {
-            headers: { userId:userId || UID  }
+            headers: { userId: UID  }
         });
         return response.data;
     } catch (error) {
@@ -55,10 +60,11 @@ const renameChat = async ({ userId, c_id, c_n }: { userId: string, c_id: string,
 };
 
 // Delete Chat
-const deleteChat = async ({ userId, c_id }: { userId: string; c_id: string }) => {
+const deleteChat = async ({ c_id }: {c_id: string }) => {
     try {
+        const UID = getUID();
         const response = await axios.delete(`${API_ENDPOINT}chat/deleteChat/${c_id}`, {
-            headers: { userId:userId || UID  },
+            headers: { userId: UID  },
         });
         return response.data;
     } catch (error) {
@@ -71,12 +77,14 @@ const deleteChat = async ({ userId, c_id }: { userId: string; c_id: string }) =>
 };
 
 // Send Conversion
-const sendConversion = async ({ userId, message, chatId, type, file}: { userId: string; message: string, chatId: string, type: string, file:any}) => {
+const sendConversion = async ({message, chatId, type, file, mode}: {  message: string, chatId: string, type: string, file:any, mode: string}) => {
     try {
-       const formData = new FormData();
+        const UID = getUID();
+        const formData = new FormData();
         formData.append("message", message);
         formData.append("c_id", chatId ? chatId: "auto");
         formData.append("c_t", type);
+        formData.append("mode", mode);
 
         if (file) {
           formData.append("file", file); // always "file"
@@ -84,7 +92,7 @@ const sendConversion = async ({ userId, message, chatId, type, file}: { userId: 
 
         const response = await axios.post(`${API_ENDPOINT}chat/chatRequest`, formData, {
           headers: {
-            userId:userId || UID,
+            userId: UID,
             "Content-Type": "multipart/form-data",
           },
         });
@@ -98,11 +106,12 @@ const sendConversion = async ({ userId, message, chatId, type, file}: { userId: 
     }
 };
 
-const fetchConversation = async ({ userId, chatId }: { userId: string, chatId: string }) => {
+const fetchConversation = async ({  chatId }: { chatId: string }) => {
     try {
+        const UID = getUID();
         const response = await axios.get(`${API_ENDPOINT}chat/fetchChats`, {
             params: { c_id: chatId },
-            headers: { userId: userId }
+            headers: { userId: UID }
         });
         return response.data;
     } catch (error) {

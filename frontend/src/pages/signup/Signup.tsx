@@ -40,15 +40,17 @@ const Signup: React.FC = () => {
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center vh-100 w-100 bg-light login-right">
-      <Row className="w-100 justify-content-start">
-        <Col xs={12} sm={8} md={4} lg={4}>
-          <div className="text-white  p-4 shadow-sm">
-            <h3 className="text-center mb-4 fw-bold">Create Account</h3>
+    <div className="vh-100 w-100 bg-light">
+    <h5 className="px-4 pt-3 pb-5" style={{letterSpacing:"0.1em", fontSize: "15px"}}>STORM AI</h5>
+    <div className="d-flex justify-content-center align-items-center bg-light ">
+      <Row className="w-100 justify-content-center" style={{color:"#000"}}>
+        <Col xs={12} sm={8} md={4} lg={4} >
+          <div className="text-white  p-4 shadow-sm" style={{border:"1px solid #aaa", borderRadius:"20px"}}>
+            <h3 className="text-center mb-4 fw-bold text-dark">Create Account</h3>
 
             <Form onSubmit={handleSubmit}>
               {/* Username */}
-              <Form.Group className="mb-2" controlId="username">
+              <Form.Group className="mb-2 text-dark" controlId="username">
                 <Form.Label>Username</Form.Label>
                 <Form.Control
                   type="text"
@@ -61,7 +63,7 @@ const Signup: React.FC = () => {
               </Form.Group>
 
               {/* Email */}
-              <Form.Group className="mb-2" controlId="email">
+              <Form.Group className="mb-2 text-dark" controlId="email">
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type="email"
@@ -74,7 +76,7 @@ const Signup: React.FC = () => {
               </Form.Group>
 
               {/* Password */}
-              <Form.Group className="mb-2" controlId="password">
+              <Form.Group className="mb-2 text-dark" controlId="password">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                   type="password"
@@ -87,7 +89,7 @@ const Signup: React.FC = () => {
               </Form.Group>
 
               {/* Profession Dropdown */}
-              <Form.Group className="mb-4" controlId="profession">
+              <Form.Group className="mb-4 text-dark" controlId="profession">
                 <Form.Label>Profession</Form.Label>
                 <Form.Select
                   name="profession"
@@ -116,11 +118,12 @@ const Signup: React.FC = () => {
               </Button>
 
               {/* Already have an account */}
-              <p className="text-center mt-3">
+              <p className="text-center mt-3 text-dark">
                 Already have an account?{" "}
                 <Link
                   to="/"
-                  className="text-decoration-none text-primary fw-semibold"
+                  className="text-decoration-none fw-semibold"
+                  style={{color:"#4f46e5"}}
                 >
                   Login
                 </Link>
@@ -129,6 +132,7 @@ const Signup: React.FC = () => {
           </div>
         </Col>
       </Row>
+    </div>
     </div>
   );
 };

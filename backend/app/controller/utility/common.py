@@ -13,6 +13,7 @@ async def add_document(collectionName: str, document: dict, model):
         validated_data = model(**document).dict()
         # Insert into MongoDB (blocking function in async context)
         result = collectionRef.insert_one(validated_data)
+        print(result,"result")
 
         return str(result.inserted_id)
     except PyMongoError as e:

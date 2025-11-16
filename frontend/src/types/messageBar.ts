@@ -9,4 +9,6 @@ export interface MessageBarProps {
   // setIsNewChat: (id: boolean) => boolean;
   setConversationData:React.Dispatch<React.SetStateAction<conversationDataProps[]>>
   setRequestProgress: React.Dispatch<React.SetStateAction<boolean>>;
+  setChatMode: React.Dispatch<React.SetStateAction<string>>;
+  chatMode: string
 }

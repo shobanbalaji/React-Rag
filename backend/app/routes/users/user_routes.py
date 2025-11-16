@@ -18,4 +18,4 @@ class UserPayload(BaseModel):
 
 @router.post("/createUser")
 async def createUser(payload: createUserModel):
-    return create_user(payload)
+    return await create_user(payload)
