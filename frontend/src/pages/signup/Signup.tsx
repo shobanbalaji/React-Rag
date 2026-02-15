@@ -41,11 +41,11 @@ const Signup: React.FC = () => {
 
   return (
     <div className="vh-100 w-100 bg-light">
-    <h5 className="px-4 pt-3 pb-5" style={{letterSpacing:"0.1em", fontSize: "15px"}}>STORM AI</h5>
+    <h1 className="px-4 pt-3 pb-5" style={{letterSpacing:"0.1em", fontSize: "15px"}}>STORM AI</h1>
     <div className="d-flex justify-content-center align-items-center bg-light ">
       <Row className="w-100 justify-content-center" style={{color:"#000"}}>
         <Col xs={12} sm={8} md={4} lg={4} >
-          <div className="text-white  p-4 shadow-sm" style={{border:"1px solid #aaa", borderRadius:"20px"}}>
+          <div className="text-white p-4">
             <h3 className="text-center mb-4 fw-bold text-dark">Create Account</h3>
 
             <Form onSubmit={handleSubmit}>

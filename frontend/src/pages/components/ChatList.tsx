@@ -104,7 +104,7 @@ const ChatList: React.FC<messageListProps> = ({
   return (
     <>
       <Row
-        className="ps-3 site-font"
+        className="ps-3 site-font justify-content-between"
         style={{
           height: "100% ",
           background: "#171717",
@@ -382,14 +382,14 @@ const ChatList: React.FC<messageListProps> = ({
           <div className="user-profile">
             <div
               className="bg-warning rounded-pill d-flex justify-content-center align-items-center"
-              style={{ height: "35px", width: "35px", fontSize: "1rem" }}
+              style={{ height: "30px", width: "30px", fontSize: "0.85rem", textTransform:"uppercase"}}
             >
               {USER_NAME?.slice(0, 1)}
             </div>
           </div>
           <div className="user-info">
-            <p className="mb-0">{USER_NAME}</p>
-            <span style={{ fontSize: "0.75rem" }}>Preview</span>
+            <p className="mt-1">{USER_NAME}</p>
+            {/* <span style={{ fontSize: "0.75rem" }}>Preview</span> */}
           </div>
         </div>
       </Row>

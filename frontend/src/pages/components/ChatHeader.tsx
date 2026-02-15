@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import { BsLayoutSidebar } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { getUserName } from "../../functions/variables/common";
+// import { getUserName } from "../../functions/variables/common";
 
 // Define only the props you need
 interface ChatHeaderProps {
@@ -14,7 +14,7 @@ interface ChatHeaderProps {
 const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
 
   const nav = useNavigate();
-  const USER_NAME = getUserName()
+  // const USER_NAME = getUserName()
 
     const handleLogout = () =>{
     try {
@@ -44,7 +44,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
 
         <Col md={2}>
           <div className="d-flex align-items-center justify-content-end gap-3">
-            <p className="mb-0">Share</p>
+            {/* <p className="mb-0">Share</p> */}
             <span>
               <IoIosLogOut size={20} style={{cursor:"pointer"}} onClick={handleLogout}/>
             </span>
@@ -54,7 +54,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ sidebar, setSidebar }) => {
               style={{ width: "25px", height: "25px" }}
             /> */}
 
-            <div className="bg-warning rounded-pill d-flex justify-content-center align-items-start" style={{height:"2rem", width:"2rem", fontSize:"1.20rem"}}> {USER_NAME?.slice(0,1)}</div>
+            {/* <div className="bg-warning rounded-pill d-flex justify-content-center align-items-start" style={{height:"2rem", width:"2rem", fontSize:"1.20rem"}}> {USER_NAME?.slice(0,1)}</div> */}
           </div>
         </Col>
       </Row>

@@ -9,7 +9,7 @@
 /* LEFT SIDE */
 .login-left {
   width: 100%;
-  max-width: 50%;
+  /* max-width: 50%; */
   display: flex;
   align-items: center;
   justify-content: center;
